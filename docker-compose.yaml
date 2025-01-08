@@ -1,0 +1,29 @@
+services:
+  database: &db
+    image: postgres
+    volumes:
+      - ./database/startup-scripts:/docker-entrypoint-initdb.d:ro
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=changeme
+      - POSTGRES_DB=dogtraining
+      - PGDATA=/var/lib/postgresql/data
+    profiles:
+      - ''
+
+
+  database-dev:
+    <<: *db
+    profiles:
+      - dev
+    ports:
+    - 8080:8080
+    volumes:
+      - ./database/tables.sql:/docker-entrypoint-initdb.d/0tables.sql:ro
+      - ./database/dev-data.sql:/docker-entrypoint-initdb.d/1dev-data.sql:ro
+      - db-dev-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
+  db-dev-data:
