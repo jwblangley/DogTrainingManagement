@@ -18,7 +18,7 @@ services:
     profiles:
       - dev
     ports:
-    - 8080:8080
+    - 5432:5432
     volumes:
       - ./database/tables.sql:/docker-entrypoint-initdb.d/0tables.sql:ro
       - ./database/dev-data.sql:/docker-entrypoint-initdb.d/1dev-data.sql:ro
