@@ -6,6 +6,9 @@
 npm install
 ```
 
+Additionally create a `.env` configuration file (use [`.env.sample`](./.env.sample))
+and modify the configuration parameters.
+
 ## Development
 
 ```bash
