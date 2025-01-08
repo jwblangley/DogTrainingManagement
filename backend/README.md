@@ -8,14 +8,18 @@ source venv/bin/activate
 python -m pip install -r requirements-dev.txt
 ```
 
+Additionally create a `.env` configuration file (use [`.env.sample`](./.env.sample))
+and modify the configuration parameters.
+To use HTTPS (recommended) set the `SSL_CERT_PATH` and `SSL_KEY_PATH` variables.
+
 ## Development
 
 ```bash
-flask run --debug
+python app.py
 ```
 
 ## Production Build
 
 ```bash
-gunicorn -w 4 app:app -b 0.0.0.0:8000
+gunicorn -w 4 app:app -b 0.0.0.0:8000 --certfile=public-certificate.crt --keyfile=privatekey.key
 ```
