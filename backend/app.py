@@ -2,6 +2,7 @@ import os
 import psycopg2
 
 from flask import Flask, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
 from contextlib import closing
 
@@ -18,6 +19,7 @@ SSL_CERT_PATH = os.getenv("SSL_CERT_PATH")
 SSL_KEY_PATH = os.getenv("SSL_KEY_PATH")
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route("/list-people")
