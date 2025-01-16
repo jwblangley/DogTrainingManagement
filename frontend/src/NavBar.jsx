@@ -29,7 +29,7 @@ export default function NavBar() {
                     >
                         <PetsIcon />
                     </IconButton>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{ flexGrow: 1, display: 'flex' }}>
                         {pages.map((page) => (
                             <Button
                                 key={page}
