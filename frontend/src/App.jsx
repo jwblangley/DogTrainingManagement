@@ -1,23 +1,27 @@
-import { useState, useEffect } from 'react'
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 import './App.css'
 
-const BACKEND_ENDPOINT = import.meta.env.VITE_BACKEND_ENDPOINT
+import NavBar from './NavBar'
+import Home from './Home';
+import Clients from './Clients';
+import Instructors from './Instructors';
+import Sessions from './Sessions';
+
 
 function App() {
-  const [name, setName] = useState("")
-
-  useEffect(() => {
-    fetch(`${BACKEND_ENDPOINT}/list-people`)
-      .then(res => res.json())
-      .then(data => {
-        setName(`${data.first_name} ${data.last_name}`)
-      })
-  }, [])
 
   return (
-    <div>
-      <h1>Hello {name}</h1>
-    </div>
+      <Router>
+        <NavBar />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/clients' element={<Clients />} />
+          <Route path='/instructors' element={<Instructors />} />
+          <Route path='/sessions' element={<Sessions />} />
+        </Routes>
+      </Router>
   )
 }
 
