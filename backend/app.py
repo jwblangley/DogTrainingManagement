@@ -22,8 +22,8 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/list-people")
-def list_people():
+@app.route("/list-clients-details")
+def list_clients_details():
     with closing(
         psycopg2.connect(
             database=POSTGRES_DB,

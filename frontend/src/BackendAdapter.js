@@ -3,8 +3,8 @@ class BackendAdapter {
         this.url = url
     }
 
-    listClients() {
-        return fetch(`${this.url}/list-people`)
+    listClientsDetails() {
+        return fetch(`${this.url}/list-clients-details`)
             .then(res => res.json())
     }
 }

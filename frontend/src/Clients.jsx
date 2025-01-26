@@ -14,7 +14,7 @@ export default function Clients() {
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
     useEffect(() => {
-        backend.current.listClients().then(data => {
+        backend.current.listClientsDetails().then(data => {
           setUsers(data)
         })
     }, [])
