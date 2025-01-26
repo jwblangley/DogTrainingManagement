@@ -8,20 +8,25 @@ import Home from './Home';
 import Clients from './Clients';
 import Instructors from './Instructors';
 import Sessions from './Sessions';
+import { BackendProvider } from './BackendProvider';
 
 
 function App() {
 
+  const BACKEND_ENDPOINT = import.meta.env.VITE_BACKEND_ENDPOINT;
+
   return (
-      <Router>
-        <NavBar />
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/clients' element={<Clients />} />
-          <Route path='/instructors' element={<Instructors />} />
-          <Route path='/sessions' element={<Sessions />} />
-        </Routes>
-      </Router>
+      <BackendProvider url={BACKEND_ENDPOINT}>
+        <Router>
+          <NavBar />
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/clients' element={<Clients />} />
+            <Route path='/instructors' element={<Instructors />} />
+            <Route path='/sessions' element={<Sessions />} />
+          </Routes>
+        </Router>
+      </BackendProvider>
   )
 }
 

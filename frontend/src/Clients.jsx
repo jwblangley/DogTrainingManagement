@@ -1,21 +1,20 @@
-import { useState, useEffect } from 'react'
-
+import { useState, useEffect, useContext } from 'react'
 
 import Typography from '@mui/material/Typography'
 
+import { BackendContext } from './BackendProvider'
+
 export default function Clients() {
 
-    // const BACKEND_ENDPOINT = import.meta.env.VITE_BACKEND_ENDPOINT
+    let backend = useContext(BackendContext)
 
-    //   const [name, setName] = useState('James')
+    const [users, setUsers] = useState([])
 
-    // useEffect(() => {
-    //   fetch(`${BACKEND_ENDPOINT}/list-people`)
-    //     .then(res => res.json())
-    //     .then(data => {
-    //       setName(`${data.first_name} ${data.last_name}`)
-    //     })
-    // }, [])
+    useEffect(() => {
+        backend.current.listClients().then(data => {
+          setUsers(data)
+        })
+    }, [])
 
     return (
         <Typography>Clients</Typography>
