@@ -4,14 +4,15 @@ import Typography from '@mui/material/Typography';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 import { BackendContext } from './BackendProvider';
+import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 
 export default function Clients() {
 
     let backend = useContext(BackendContext)
 
     const [users, setUsers] = useState([])
-
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
+    const [addingClient, setAddingClient] = useState(false);
 
     useEffect(() => {
         backend.current.listClientsDetails().then(data => {
@@ -26,9 +27,31 @@ export default function Clients() {
         { field: 'phone', headerName: 'Contact Number', width: 150 },
     ];
 
+    const addClient = ({firstName, lastName, email, phone}) => {
+        backend.current.addNewClient({
+            "first_name": firstName,
+            "last_name": lastName,
+            "email": email,
+            "phone": phone,
+        }).then(() => {
+            setAddingClient(false)
+            backend.current.listClientsDetails().then(data => {
+                setUsers(data)
+            })
+        });
+    }
+
     return (
         <div>
-            <Typography variant="h4">Clients</Typography>
+            <Stack spacing={2} direction="row">
+                <Typography variant="h4">Clients</Typography>
+                <Button
+                    variant="contained"
+                    onClick={() => {setAddingClient(true)}}
+                >
+                    Add
+                </Button>
+            </Stack>
             <br/>
             <DataGrid
                 rows={users}
@@ -46,6 +69,57 @@ export default function Clients() {
                 initialState={{ pagination: { page: 0, pageSize: 10 } }}
                 pageSizeOptions={[5, 10]}
             />
+            <Dialog
+                open={addingClient}
+                onClose={() => {setAddingClient(false)}}
+                PaperProps={{
+                    component: 'form',
+                    onSubmit: (event) => {
+                        event.preventDefault();
+                        const formData = new FormData(event.currentTarget);
+                        const formJson = Object.fromEntries((formData).entries());
+                        addClient(formJson)
+                    },
+                }}
+            >
+                <DialogTitle>Add New Client</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        required
+                        id="firstName"
+                        name="firstName"
+                        label="First Name"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        id="lastName"
+                        name="lastName"
+                        label="Last Name"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        id="email"
+                        name="email"
+                        label="Email Address"
+                        type="email"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        id="phone"
+                        name="phone"
+                        label="Contact Number"
+                        fullWidth
+                        variant="standard"
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setAddingClient(false)}>Cancel</Button>
+                    <Button type="submit">Add</Button>
+                </DialogActions>
+            </Dialog>
         </div>
 
     )
