@@ -1,7 +1,11 @@
-INSERT INTO people (
+INSERT INTO clients (
     first_name,
-    last_name
+    last_name,
+    email,
+    phone
 ) VALUES (
     'John',
-    'Smith'
+    'Smith',
+    'johnsmith@example.com',
+    '+441234567890'
 );

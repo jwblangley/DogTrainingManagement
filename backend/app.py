@@ -34,15 +34,15 @@ def list_people():
         )
     ) as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT first_name, last_name FROM people LIMIT 1")
-        first_name, last_name = cursor.fetchone()
+        cursor.execute("SELECT id, first_name, last_name, email, phone FROM clients")
 
-        return jsonify(
-            {
-                "first_name": first_name,
-                "last_name": last_name,
-            }
-        )
+        return jsonify([{
+            "id": client_id,
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "phone": phone
+        } for (client_id, first_name, last_name, email, phone) in cursor.fetchall()])
 
 
 if __name__ == "__main__":
