@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import './App.css'
 
+import { Paper } from '@mui/material';
+
 import NavBar from './NavBar'
 import Home from './Home';
 import Clients from './Clients';
@@ -19,12 +21,14 @@ function App() {
       <BackendProvider url={BACKEND_ENDPOINT}>
         <Router>
           <NavBar />
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/clients' element={<Clients />} />
-            <Route path='/instructors' element={<Instructors />} />
-            <Route path='/sessions' element={<Sessions />} />
-          </Routes>
+          <Paper className="bodyPaper">
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/clients' element={<Clients />} />
+              <Route path='/instructors' element={<Instructors />} />
+              <Route path='/sessions' element={<Sessions />} />
+            </Routes>
+          </Paper>
         </Router>
       </BackendProvider>
   )
