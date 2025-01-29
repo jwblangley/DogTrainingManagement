@@ -14,11 +14,13 @@ export default function Clients() {
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
     const [addingClient, setAddingClient] = useState(false);
 
-    useEffect(() => {
+    const pullState = () => {
         backend.current.listClientsDetails().then(data => {
-          setUsers(data)
+            setUsers(data)
         })
-    }, [])
+    }
+
+    useEffect(pullState, [])
 
     const columns = [
         { field: 'first_name', headerName: 'First name', width: 150 },
