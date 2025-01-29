@@ -1,5 +1,5 @@
 flask
 flask-cors
 gunicorn
-psycopg2-binary
+psycopg2
 python-dotenv
