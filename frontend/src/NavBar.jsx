@@ -11,7 +11,7 @@ import PetsIcon from '@mui/icons-material/Pets';
 
 export default function NavBar() {
 
-    const pages = ['clients', 'instructors', 'sessions']
+    const pages = ['clients', 'dogs', 'instructors', 'sessions']
 
     const navigate = useNavigate()
 

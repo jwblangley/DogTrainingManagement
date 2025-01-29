@@ -1,18 +1,15 @@
-import os
-
 import psycopg2
 
 from contextlib import closing
 
+from psql_adapter.config import POSTGRES_USER
+from psql_adapter.config import POSTGRES_PASSWORD
+from psql_adapter.config import POSTGRES_HOST
+from psql_adapter.config import POSTGRES_PORT
+from psql_adapter.config import POSTGRES_DB
 
-POSTGRES_USER = os.getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-POSTGRES_HOST = os.getenv("POSTGRES_HOST")
-POSTGRES_PORT = os.getenv("POSTGRES_PORT")
-POSTGRES_DB = os.getenv("POSTGRES_DB")
 
-
-def list_clients_details():
+def list_dogs_details():
     with closing(
         psycopg2.connect(
             database=POSTGRES_DB,
@@ -23,21 +20,21 @@ def list_clients_details():
         )
     ) as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, first_name, last_name, email, phone FROM clients")
+        cursor.execute("SELECT id, pet_name, owner_id, breed, notes FROM dogs")
 
         return [
             {
-                "id": client_id,
-                "first_name": first_name,
-                "last_name": last_name,
-                "email": email,
-                "phone": phone,
+                "id": dog_id,
+                "pet_name": pet_name,
+                "owner_id": owner_id,
+                "breed": breed,
+                "notes": notes,
             }
-            for (client_id, first_name, last_name, email, phone) in cursor.fetchall()
+            for (dog_id, pet_name, owner_id, breed, notes) in cursor.fetchall()
         ]
 
 
-def add_new_client(first_name, last_name, email, phone):
+def add_new_dog(pet_name, owner_id, breed, notes):
     with closing(
         psycopg2.connect(
             database=POSTGRES_DB,
@@ -49,12 +46,12 @@ def add_new_client(first_name, last_name, email, phone):
     ) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO clients (first_name, last_name, email, phone) VALUES (%s, %s, %s, %s)",
-            (first_name, last_name, email, phone),
+            "INSERT INTO dogs (pet_name, owner_id, breed, notes) VALUES (%s, %s, %s, %s)",
+            (pet_name, owner_id, breed, notes),
         )
         conn.commit()
 
-def modify_client(client_id, first_name, last_name, email, phone):
+def modify_dog(dog_id, pet_name, owner_id, breed, notes):
     with closing(
         psycopg2.connect(
             database=POSTGRES_DB,
@@ -66,12 +63,12 @@ def modify_client(client_id, first_name, last_name, email, phone):
     ) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "UPDATE clients SET first_name=%s, last_name=%s, email=%s, phone=%s WHERE id=%s",
-            (first_name, last_name, email, phone, client_id),
+            "UPDATE dogs SET pet_name=%s, owner_id=%s, breed=%s, notes=%s WHERE id=%s",
+            (pet_name, owner_id, breed, notes, dog_id),
         )
         conn.commit()
 
-def delete_clients(clients_to_delete):
+def delete_dogs(dogs_to_delete):
     with closing(
         psycopg2.connect(
             database=POSTGRES_DB,
@@ -82,10 +79,10 @@ def delete_clients(clients_to_delete):
         )
     ) as conn:
         cursor = conn.cursor()
-        for client_id in clients_to_delete:
+        for dog_id in dogs_to_delete:
             cursor.execute(
-                "DELETE FROM clients WHERE id=%s",
-                (client_id,),
+                "DELETE FROM dogs WHERE id=%s",
+                (dog_id,),
             )
 
         conn.commit()
