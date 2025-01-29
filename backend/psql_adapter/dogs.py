@@ -20,7 +20,11 @@ def list_dogs_details():
         )
     ) as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, pet_name, owner_id, breed, notes FROM dogs")
+        cursor.execute(
+            "SELECT dogs.id, dogs.pet_name, dogs.owner_id, dogs.breed, dogs.notes, clients.first_name, clients.last_name "
+            "FROM dogs INNER JOIN clients "
+            "ON dogs.owner_id = clients.id"
+        )
 
         return [
             {
@@ -29,8 +33,10 @@ def list_dogs_details():
                 "owner_id": owner_id,
                 "breed": breed,
                 "notes": notes,
+                "owner_first_name": owner_first_name,
+                "owner_last_name": owner_last_name,
             }
-            for (dog_id, pet_name, owner_id, breed, notes) in cursor.fetchall()
+            for (dog_id, pet_name, owner_id, breed, notes, owner_first_name, owner_last_name) in cursor.fetchall()
         ]
 
 

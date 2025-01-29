@@ -30,9 +30,11 @@ export default function Dogs() {
 
     const columns = [
         { field: 'pet_name', headerName: 'Pet\'s name', width: 150 },
-        { field: 'owner_id', headerName: 'Owner ID', width: 150 },
+        { field: 'owner_full_name', headerName: 'Owner\'s name', width: 300,
+            valueGetter: (value, row) => `${row.owner_first_name || ''} ${row.owner_last_name || ''}`
+        },
         { field: 'breed', headerName: 'Breed', width: 250 },
-        { field: 'notes', headerName: 'Notes', width: 150 },
+        { field: 'notes', headerName: 'Notes', width: 400 },
     ];
 
     const addClient = ({petName, ownerId, breed, notes}) => {
