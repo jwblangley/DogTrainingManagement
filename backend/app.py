@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 from psql_adapter import list_clients_details as psql_list_clients_details
 from psql_adapter import add_new_client as psql_add_new_client
+from psql_adapter import modify_client as psql_modify_client
 from psql_adapter import delete_clients as psql_delete_clients
 
 
@@ -29,6 +30,19 @@ def add_new_client():
     form_json = request.get_json()
 
     psql_add_new_client(
+        form_json.get("first_name", None),
+        form_json.get("last_name", None),
+        form_json.get("email", None),
+        form_json.get("phone", None),
+    )
+    return "Success"
+
+@app.route("/modify-client", methods=["POST"])
+def modify_client():
+    form_json = request.get_json()
+
+    psql_modify_client(
+        form_json.get("id", None),
         form_json.get("first_name", None),
         form_json.get("last_name", None),
         form_json.get("email", None),

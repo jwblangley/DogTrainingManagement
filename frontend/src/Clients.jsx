@@ -10,15 +10,20 @@ export default function Clients() {
 
     let backend = useContext(BackendContext)
 
-    const [users, setUsers] = useState([])
+    const [clients, setClients] = useState([])
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
     const [addingClient, setAddingClient] = useState(false);
+    const [modifyingClient, setModifyingClient] = useState(false);
     const [deletingClients, setDeletingClients] = useState(false);
 
     const pullState = () => {
         backend.current.listClientsDetails().then(data => {
-            setUsers(data)
+            setClients(data)
         })
+    }
+
+    const getClient = (clientId) => {
+        return clients.find(c => c.id === clientId)
     }
 
     useEffect(pullState, [])
@@ -42,6 +47,19 @@ export default function Clients() {
         });
     }
 
+    const modifyClient = (clientId, {firstName, lastName, email, phone}) => {
+        backend.current.modifyClient(clientId, {
+            "first_name": firstName,
+            "last_name": lastName,
+            "email": email,
+            "phone": phone,
+        }).then(() => {
+            setModifyingClient(false)
+            setRowSelectionModel([])
+            pullState()
+        });
+    }
+
     const deleteClients = () => {
         backend.current.deleteClients(rowSelectionModel)
             .then(() => {
@@ -58,8 +76,16 @@ export default function Clients() {
                 <Button
                     variant="contained"
                     onClick={() => {setAddingClient(true)}}
+                    disabled={rowSelectionModel.length > 0}
                 >
                     Add
+                </Button>
+                <Button
+                    variant="contained"
+                    onClick={() => {setModifyingClient(true)}}
+                    disabled={rowSelectionModel.length !== 1}
+                >
+                    Modify
                 </Button>
                 <Button
                     variant="contained"
@@ -71,7 +97,7 @@ export default function Clients() {
             </Stack>
             <br/>
             <DataGrid
-                rows={users}
+                rows={clients}
                 columns={columns}
                 gridRowId={(row) => row.id}
                 checkboxSelection
@@ -87,19 +113,27 @@ export default function Clients() {
                 pageSizeOptions={[5, 10]}
             />
             <Dialog
-                open={addingClient}
-                onClose={() => {setAddingClient(false)}}
+                open={addingClient || modifyingClient}
+                onClose={() => {
+                    setAddingClient(false)
+                    setModifyingClient(false)
+                }}
                 PaperProps={{
                     component: 'form',
                     onSubmit: (event) => {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries((formData).entries());
-                        addClient(formJson)
+                        console.assert(addingClient != modifyingClient)
+                        if (addingClient) {
+                            addClient(formJson)
+                        } else if (modifyingClient) {
+                            modifyClient(rowSelectionModel[0], formJson)
+                        }
                     },
                 }}
             >
-                <DialogTitle>Add New Client</DialogTitle>
+                <DialogTitle>{addingClient ? "Add New Client" : "Modify Client"}</DialogTitle>
                 <DialogContent>
                     <TextField
                         required
@@ -108,6 +142,7 @@ export default function Clients() {
                         label="First Name"
                         fullWidth
                         variant="standard"
+                        defaultValue={modifyingClient ? getClient(rowSelectionModel[0]).first_name : ""}
                     />
                     <TextField
                         id="lastName"
@@ -115,7 +150,8 @@ export default function Clients() {
                         label="Last Name"
                         fullWidth
                         variant="standard"
-                    />
+                        defaultValue={modifyingClient ? getClient(rowSelectionModel[0]).last_name : ""}
+                        />
                     <TextField
                         id="email"
                         name="email"
@@ -123,17 +159,25 @@ export default function Clients() {
                         type="email"
                         fullWidth
                         variant="standard"
-                    />
+                        defaultValue={modifyingClient ? getClient(rowSelectionModel[0]).email : ""}
+                        />
                     <TextField
                         id="phone"
                         name="phone"
                         label="Contact Number"
                         fullWidth
                         variant="standard"
+                        defaultValue={modifyingClient ? getClient(rowSelectionModel[0]).phone : ""}
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setAddingClient(false)}>Cancel</Button>
+                    <Button onClick={() => {
+                        console.assert(addingClient != modifyingClient)
+                        setAddingClient(false)
+                        setModifyingClient(false)
+                    }}>
+                        Cancel
+                    </Button>
                     <Button type="submit">Add</Button>
                 </DialogActions>
             </Dialog>
