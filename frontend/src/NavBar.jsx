@@ -23,7 +23,6 @@ export default function NavBar() {
                         size='large'
                         edge='start'
                         color='inherit'
-                        aria-label='menu'
                         onClick={() => navigate('/')}
                         sx={{ marginRight: 2 }}
                     >
