@@ -22,6 +22,18 @@ class BackendAdapter {
             }
         });
     }
+
+    deleteClients(clients_to_delete) {
+        return fetch(`${this.url}/delete-clients`, {
+            method: "POST",
+            body: JSON.stringify({
+                clients_to_delete
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+    }
 }
 
 

@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 from psql_adapter import list_clients_details as psql_list_clients_details
 from psql_adapter import add_new_client as psql_add_new_client
+from psql_adapter import delete_clients as psql_delete_clients
 
 
 load_dotenv()
@@ -32,6 +33,15 @@ def add_new_client():
         form_json.get("last_name", None),
         form_json.get("email", None),
         form_json.get("phone", None),
+    )
+    return "Success"
+
+@app.route("/delete-clients", methods=["POST"])
+def delete_clients():
+    request_json = request.get_json()
+
+    psql_delete_clients(
+        request_json.get("clients_to_delete", []),
     )
     return "Success"
 

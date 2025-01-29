@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 import { BackendContext } from './BackendProvider';
-import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField } from '@mui/material';
 
 export default function Clients() {
 
@@ -13,6 +13,7 @@ export default function Clients() {
     const [users, setUsers] = useState([])
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
     const [addingClient, setAddingClient] = useState(false);
+    const [deletingClients, setDeletingClients] = useState(false);
 
     const pullState = () => {
         backend.current.listClientsDetails().then(data => {
@@ -37,10 +38,17 @@ export default function Clients() {
             "phone": phone,
         }).then(() => {
             setAddingClient(false)
-            backend.current.listClientsDetails().then(data => {
-                setUsers(data)
-            })
+            pullState()
         });
+    }
+
+    const deleteClients = () => {
+        backend.current.deleteClients(rowSelectionModel)
+            .then(() => {
+                setRowSelectionModel([])
+                setDeletingClients(false)
+                pullState()
+            })
     }
 
     return (
@@ -52,6 +60,13 @@ export default function Clients() {
                     onClick={() => {setAddingClient(true)}}
                 >
                     Add
+                </Button>
+                <Button
+                    variant="contained"
+                    onClick={() => setDeletingClients(true)}
+                    disabled={rowSelectionModel.length <= 0}
+                >
+                    Delete
                 </Button>
             </Stack>
             <br/>
@@ -120,6 +135,29 @@ export default function Clients() {
                 <DialogActions>
                     <Button onClick={() => setAddingClient(false)}>Cancel</Button>
                     <Button type="submit">Add</Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={deletingClients}
+                onClose={() => setDeletingClients(false)}
+            >
+                <DialogTitle>{"Delete Selected Client(s)?"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {"Delete selected client(s)?"}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={() => setDeletingClients(false)}
+                    >Cancel
+                    </Button>
+                    <Button
+                        onClick={deleteClients}
+                        autoFocus
+                    >
+                        Delete
+                    </Button>
                 </DialogActions>
             </Dialog>
         </div>

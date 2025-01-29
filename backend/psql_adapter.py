@@ -53,3 +53,22 @@ def add_new_client(first_name, last_name, email, phone):
             (first_name, last_name, email, phone),
         )
         conn.commit()
+
+def delete_clients(clients_to_delete):
+    with closing(
+        psycopg2.connect(
+            database=POSTGRES_DB,
+            host=POSTGRES_HOST,
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+            port=POSTGRES_PORT,
+        )
+    ) as conn:
+        cursor = conn.cursor()
+        for client_id in clients_to_delete:
+            cursor.execute(
+                "DELETE FROM clients WHERE id=%s",
+                (client_id,),
+            )
+
+        conn.commit()
