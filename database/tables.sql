@@ -11,5 +11,6 @@ CREATE TABLE dogs (
     owner_id    INTEGER REFERENCES clients(id),
     pet_name    VARCHAR(255) NOT NULL,
     breed       VARCHAR(255),
+    sex         VARCHAR(63),
     notes       VARCHAR(2047)
 );

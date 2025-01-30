@@ -39,14 +39,16 @@ export default function Dogs() {
             valueGetter: (value, row) => `${`${row.owner_first_name} ` || ''}${row.owner_last_name || ''}`
         },
         { field: 'breed', headerName: 'Breed', width: 250 },
+        { field: 'sex', headerName: 'Sex', width: 150 },
         { field: 'notes', headerName: 'Notes', width: 400 },
     ];
 
-    const addClient = ({petName, ownerId, breed, notes}) => {
+    const addClient = ({petName, ownerId, breed, sex, notes}) => {
         backend.current.addNewDog({
             "pet_name": petName,
             "owner_id": ownerId,
             "breed": breed,
+            "sex": sex,
             "notes": notes,
         }).then(() => {
             setAddingDog(false)
@@ -55,11 +57,12 @@ export default function Dogs() {
         });
     }
 
-    const modifyDog = (dogId, {petName, ownerId, breed, notes}) => {
+    const modifyDog = (dogId, {petName, ownerId, breed, sex, notes}) => {
         backend.current.modifyDog(dogId, {
             "pet_name": petName,
             "owner_id": ownerId,
             "breed": breed,
+            "sex": sex,
             "notes": notes,
         }).then(() => {
             setModifyingDog(false)
@@ -174,11 +177,23 @@ export default function Dogs() {
                         id="breed"
                         name="breed"
                         label="Breed"
-                        type="breed"
                         fullWidth
                         variant="standard"
                         defaultValue={modifyingDog ? getDog(rowSelectionModel[0]).breed : ""}
                     />
+                    <Select
+                        id="sex"
+                        name="sex"
+                        label="Sex"
+                        defaultValue={modifyingDog ? getDog(rowSelectionModel[0]).sex : ""}
+                    >
+                        <MenuItem value="Female">Female</MenuItem>
+                        <MenuItem value={"Female (entire)"}>{"Female (entire)"}</MenuItem>
+                        <MenuItem value={"Female (neutered)"}>{"Female (neutered)"}</MenuItem>
+                        <MenuItem value="Male">Male</MenuItem>
+                        <MenuItem value={"Male (entire)"}>{"Male (entire)"}</MenuItem>
+                        <MenuItem value={"Male (neutered)"}>{"Male (neutered)"}</MenuItem>
+                    </Select>
                     <TextField
                         id="notes"
                         name="notes"

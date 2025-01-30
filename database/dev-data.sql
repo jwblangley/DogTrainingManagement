@@ -14,10 +14,12 @@ INSERT INTO dogs (
     owner_id,
     pet_name,
     breed,
+    sex,
     notes
 ) VALUES (
     1,
     'Kito',
     'Unknown Terrier',
+    'Male (neutered)',
     'A good boi'
 );
