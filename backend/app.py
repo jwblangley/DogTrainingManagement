@@ -4,6 +4,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from dotenv import load_dotenv
 
+from psql_adapter.clients import list_clients as psql_list_clients
 from psql_adapter.clients import list_clients_details as psql_list_clients_details
 from psql_adapter.clients import add_new_client as psql_add_new_client
 from psql_adapter.clients import modify_client as psql_modify_client
@@ -26,6 +27,12 @@ CORS(app)
 """
 Clients
 """
+
+@app.route("/list-clients")
+def list_clients():
+    clients_details = psql_list_clients()
+    return jsonify(clients_details)
+
 
 @app.route("/list-clients-details")
 def list_clients_details():

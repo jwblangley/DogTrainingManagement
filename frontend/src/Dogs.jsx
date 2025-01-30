@@ -4,21 +4,26 @@ import Typography from '@mui/material/Typography';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 import { BackendContext } from './BackendProvider';
-import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField } from '@mui/material';
+import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField, MenuItem, Select, Autocomplete, InputLabel } from '@mui/material';
 
 export default function Dogs() {
 
     let backend = useContext(BackendContext)
 
     const [dogs, setDogs] = useState([])
+    const [clients, setClients] = useState([])
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
     const [addingDog, setAddingDog] = useState(false);
     const [modifyingDog, setModifyingDog] = useState(false);
     const [deletingDogs, setDeletingDogs] = useState(false);
+    const [selectedOwnerId, setSelectedOwnerId] = useState(null);
 
     const pullState = () => {
         backend.current.listDogsDetails().then(data => {
             setDogs(data)
+        })
+        backend.current.listClients().then(data => {
+            setClients(data)
         })
     }
 
@@ -45,6 +50,7 @@ export default function Dogs() {
             "notes": notes,
         }).then(() => {
             setAddingDog(false)
+            setSelectedOwnerId(null)
             pullState()
         });
     }
@@ -57,6 +63,7 @@ export default function Dogs() {
             "notes": notes,
         }).then(() => {
             setModifyingDog(false)
+            setSelectedOwnerId(null)
             setRowSelectionModel([])
             pullState()
         });
@@ -119,13 +126,15 @@ export default function Dogs() {
                 onClose={() => {
                     setAddingDog(false)
                     setModifyingDog(false)
+                    setSelectedOwnerId(null)
                 }}
                 PaperProps={{
                     component: 'form',
                     onSubmit: (event) => {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
-                        const formJson = Object.fromEntries((formData).entries());
+                        const formJson = {...Object.fromEntries((formData).entries()), ownerId: selectedOwnerId};
+
                         console.assert(addingDog != modifyingDog)
                         if (addingDog) {
                             addClient(formJson)
@@ -146,14 +155,21 @@ export default function Dogs() {
                         variant="standard"
                         defaultValue={modifyingDog ? getDog(rowSelectionModel[0]).pet_name : ""}
                     />
-                    <TextField
-                        id="ownerId"
-                        name="ownerId"
-                        label="Owner ID"
-                        fullWidth
-                        variant="standard"
-                        defaultValue={modifyingDog ? getDog(rowSelectionModel[0]).owner_id : ""}
-                        />
+                    <Autocomplete
+                        id="ownerId" name="ownerId"
+                        options={clients.map(c => c.id)}
+                        value={selectedOwnerId}
+                        onChange={(e, v) => setSelectedOwnerId(v)}
+                        getOptionLabel={opt => {
+                            if (opt === null) {
+                                return ""
+                            }
+                            const c = clients.find(c => c.id === opt)
+                            return `${`${c.first_name} ` || ''}${c.last_name || ''}`
+                        }}
+                        sx={{ width: 300, marginTop: 2}}
+                        renderInput={(params) => <TextField {...params} label="Owner" />}
+                    />
                     <TextField
                         id="breed"
                         name="breed"
@@ -162,7 +178,7 @@ export default function Dogs() {
                         fullWidth
                         variant="standard"
                         defaultValue={modifyingDog ? getDog(rowSelectionModel[0]).breed : ""}
-                        />
+                    />
                     <TextField
                         id="notes"
                         name="notes"
@@ -177,6 +193,7 @@ export default function Dogs() {
                         console.assert(addingDog != modifyingDog)
                         setAddingDog(false)
                         setModifyingDog(false)
+                        setSelectedOwnerId(null)
                     }}>
                         Cancel
                     </Button>

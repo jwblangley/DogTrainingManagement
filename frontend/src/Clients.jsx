@@ -151,7 +151,7 @@ export default function Clients() {
                         fullWidth
                         variant="standard"
                         defaultValue={modifyingClient ? getClient(rowSelectionModel[0]).last_name : ""}
-                        />
+                    />
                     <TextField
                         id="email"
                         name="email"
@@ -160,7 +160,7 @@ export default function Clients() {
                         fullWidth
                         variant="standard"
                         defaultValue={modifyingClient ? getClient(rowSelectionModel[0]).email : ""}
-                        />
+                    />
                     <TextField
                         id="phone"
                         name="phone"

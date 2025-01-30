@@ -9,6 +9,28 @@ from psql_adapter.config import POSTGRES_PORT
 from psql_adapter.config import POSTGRES_DB
 
 
+def list_clients():
+    with closing(
+        psycopg2.connect(
+            database=POSTGRES_DB,
+            host=POSTGRES_HOST,
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+            port=POSTGRES_PORT,
+        )
+    ) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, first_name, last_name FROM clients")
+
+        return [
+            {
+                "id": client_id,
+                "first_name": first_name,
+                "last_name": last_name,
+            }
+            for (client_id, first_name, last_name) in cursor.fetchall()
+        ]
+
 def list_clients_details():
     with closing(
         psycopg2.connect(
