@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 import { BackendContext } from './BackendProvider';
-import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField, MenuItem, Select, Autocomplete, InputLabel } from '@mui/material';
+import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField, MenuItem, Autocomplete} from '@mui/material';
 
 export default function Dogs() {
 
@@ -173,8 +173,7 @@ export default function Dogs() {
                             const c = clients.find(c => c.id === opt)
                             return `${`${c.first_name} ` || ''}${c.last_name || ''}`
                         }}
-                        sx={{ width: 300, marginTop: 2}}
-                        renderInput={(params) => <TextField {...params} label="Owner" />}
+                        renderInput={(params) => <TextField {...params} label="Owner" variant="standard" fullWidth />}
                     />
                     <TextField
                         id="breed"
@@ -184,11 +183,14 @@ export default function Dogs() {
                         variant="standard"
                         defaultValue={modifyingDog ? getDog(rowSelectionModel[0]).breed : ""}
                     />
-                    <Select
+                    <TextField
+                        select
+                        variant="standard"
+                        fullWidth
                         id="sex"
                         name="sex"
                         label="Sex"
-                        defaultValue={modifyingDog ? getDog(rowSelectionModel[0]).sex : ""}
+                        defaultValue={modifyingDog ? getDog(rowSelectionModel[0]).sex : ''}
                     >
                         <MenuItem value="Female">Female</MenuItem>
                         <MenuItem value={"Female (entire)"}>{"Female (entire)"}</MenuItem>
@@ -196,7 +198,7 @@ export default function Dogs() {
                         <MenuItem value="Male">Male</MenuItem>
                         <MenuItem value={"Male (entire)"}>{"Male (entire)"}</MenuItem>
                         <MenuItem value={"Male (neutered)"}>{"Male (neutered)"}</MenuItem>
-                    </Select>
+                    </TextField>
                     <TextField
                         id="notes"
                         name="notes"
