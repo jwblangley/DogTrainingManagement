@@ -94,7 +94,10 @@ export default function Dogs() {
                 </Button>
                 <Button
                     variant="contained"
-                    onClick={() => {setModifyingDog(true)}}
+                    onClick={() => {
+                        setModifyingDog(true)
+                        setSelectedOwnerId(getDog(rowSelectionModel[0]).owner_id)
+                    }}
                     disabled={rowSelectionModel.length !== 1}
                 >
                     Modify
