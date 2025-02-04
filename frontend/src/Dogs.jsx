@@ -242,7 +242,7 @@ export default function Dogs() {
                     }}>
                         Cancel
                     </Button>
-                    <Button type="submit">Add</Button>
+                    <Button type="submit">{modifyingDog ? "Modify" : "Add"}</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
