@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime'
 
 import { useState, useEffect, useContext } from 'react';
 
@@ -9,6 +10,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { BackendContext } from './BackendProvider';
 import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField, MenuItem, Autocomplete} from '@mui/material';
 
+dayjs.extend(relativeTime)
 
 export default function Dogs() {
 
@@ -42,14 +44,21 @@ export default function Dogs() {
         { field: 'owner_full_name', headerName: 'Owner\'s name', width: 300,
             valueGetter: (value, row) => `${`${row.owner_first_name} ` || ''}${row.owner_last_name || ''}`
         },
-        { field: 'dob', headerName: 'dob', width: 250 },
+        { field: 'age', headerName: 'Age', width: 150,
+            valueGetter: (value, row) => {
+                if (row.dob === null) {
+                    return ""
+                }
+
+                return dayjs(row.dob, "YYYY-MM-DD").fromNow(true)
+            }
+         },
         { field: 'breed', headerName: 'Breed', width: 250 },
         { field: 'sex', headerName: 'Sex', width: 150 },
         { field: 'notes', headerName: 'Notes', width: 400 },
     ];
 
     const addDog = ({petName, ownerId, dob, breed, sex, notes}) => {
-        console.log(dob)
         backend.current.addNewDog({
             "pet_name": petName,
             "owner_id": ownerId,
