@@ -43,7 +43,8 @@ export default function Dogs() {
         { field: 'notes', headerName: 'Notes', width: 400 },
     ];
 
-    const addClient = ({petName, ownerId, breed, sex, notes}) => {
+    const addDog = ({petName, ownerId, breed, sex, notes}) => {
+        console.log(dob)
         backend.current.addNewDog({
             "pet_name": petName,
             "owner_id": ownerId,
@@ -143,7 +144,7 @@ export default function Dogs() {
 
                         console.assert(addingDog != modifyingDog)
                         if (addingDog) {
-                            addClient(formJson)
+                            addDog(formJson)
                         } else if (modifyingDog) {
                             modifyDog(rowSelectionModel[0], formJson)
                         }
