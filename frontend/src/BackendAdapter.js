@@ -64,12 +64,13 @@ class BackendAdapter {
             .then(res => res.json());
     }
 
-    addNewDog({pet_name, owner_id, breed, sex, notes}) {
+    addNewDog({pet_name, owner_id, dob, breed, sex, notes}) {
         return fetch(`${this.url}/add-new-dog`, {
             method: "POST",
             body: JSON.stringify({
                 pet_name,
                 owner_id,
+                dob,
                 breed,
                 sex,
                 notes
@@ -80,13 +81,14 @@ class BackendAdapter {
         });
     }
 
-    modifyDog(id, {pet_name, owner_id, breed, sex, notes}) {
+    modifyDog(id, {pet_name, owner_id, dob, breed, sex, notes}) {
         return fetch(`${this.url}/modify-dog`, {
             method: "POST",
             body: JSON.stringify({
                 id,
                 pet_name,
                 owner_id,
+                dob,
                 breed,
                 sex,
                 notes

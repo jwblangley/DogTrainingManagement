@@ -1,10 +1,14 @@
+import dayjs from 'dayjs';
+
 import { useState, useEffect, useContext } from 'react';
 
 import Typography from '@mui/material/Typography';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { BackendContext } from './BackendProvider';
 import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField, MenuItem, Autocomplete} from '@mui/material';
+
 
 export default function Dogs() {
 
@@ -38,16 +42,18 @@ export default function Dogs() {
         { field: 'owner_full_name', headerName: 'Owner\'s name', width: 300,
             valueGetter: (value, row) => `${`${row.owner_first_name} ` || ''}${row.owner_last_name || ''}`
         },
+        { field: 'dob', headerName: 'dob', width: 250 },
         { field: 'breed', headerName: 'Breed', width: 250 },
         { field: 'sex', headerName: 'Sex', width: 150 },
         { field: 'notes', headerName: 'Notes', width: 400 },
     ];
 
-    const addDog = ({petName, ownerId, breed, sex, notes}) => {
+    const addDog = ({petName, ownerId, dob, breed, sex, notes}) => {
         console.log(dob)
         backend.current.addNewDog({
             "pet_name": petName,
             "owner_id": ownerId,
+            "dob": dob.length > 0 ? dayjs(dob, "DD/MM/YYYY").format("YYYY-MM-DD") : null,
             "breed": breed,
             "sex": sex,
             "notes": notes,
@@ -58,10 +64,11 @@ export default function Dogs() {
         });
     }
 
-    const modifyDog = (dogId, {petName, ownerId, breed, sex, notes}) => {
+    const modifyDog = (dogId, {petName, ownerId, dob, breed, sex, notes}) => {
         backend.current.modifyDog(dogId, {
             "pet_name": petName,
             "owner_id": ownerId,
+            "dob": dayjs(dob, "DD/MM/YYYY").format("YYYY-MM-DD"),
             "breed": breed,
             "sex": sex,
             "notes": notes,
@@ -175,6 +182,23 @@ export default function Dogs() {
                             return `${`${c.first_name} ` || ''}${c.last_name || ''}`
                         }}
                         renderInput={(params) => <TextField {...params} label="Owner" variant="standard" fullWidth required/>}
+                    />
+                    <DatePicker
+                        label="Date of Birth"
+                        id="dob"
+                        name="dob"
+                        defaultValue={modifyingDog ? dayjs(getDog(rowSelectionModel[0]).dob, "YYYY-MM-DD") : null}
+                        fullWidth
+                        disableFuture
+                        variant="standard"
+                        sx={{
+                            width: "100%"
+                        }}
+                        slotProps={{
+                            textField: {
+                                variant: "standard"
+                            }
+                        }}
                     />
                     <TextField
                         id="breed"

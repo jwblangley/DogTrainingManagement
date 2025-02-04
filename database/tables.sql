@@ -8,8 +8,9 @@ CREATE TABLE clients (
 
 CREATE TABLE dogs (
     id          SERIAL PRIMARY KEY,
-    owner_id    INTEGER REFERENCES clients(id),
     pet_name    VARCHAR(255) NOT NULL,
+    owner_id    INTEGER REFERENCES clients(id),
+    dob         DATE,
     breed       VARCHAR(255),
     sex         VARCHAR(63),
     notes       VARCHAR(2047)

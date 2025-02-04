@@ -91,6 +91,7 @@ def add_new_dog():
     psql_add_new_dog(
         form_json.get("pet_name", None),
         form_json.get("owner_id", None),
+        form_json.get("dob", None),
         form_json.get("breed", None),
         form_json.get("sex", None),
         form_json.get("notes", None),
@@ -105,6 +106,7 @@ def modify_dog():
         form_json.get("id", None),
         form_json.get("pet_name", None),
         form_json.get("owner_id", None),
+        form_json.get("dob", None),
         form_json.get("breed", None),
         form_json.get("sex", None),
         form_json.get("notes", None),

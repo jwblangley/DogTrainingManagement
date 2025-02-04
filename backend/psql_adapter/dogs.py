@@ -21,27 +21,29 @@ def list_dogs_details():
     ) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT dogs.id, dogs.pet_name, dogs.owner_id, dogs.breed, dogs.sex, dogs.notes, clients.first_name, clients.last_name "
+            "SELECT dogs.id, dogs.pet_name, dogs.owner_id, dogs.dob, dogs.breed, dogs.sex, dogs.notes, clients.first_name, clients.last_name "
             "FROM dogs INNER JOIN clients "
             "ON dogs.owner_id = clients.id"
         )
+
 
         return [
             {
                 "id": dog_id,
                 "pet_name": pet_name,
                 "owner_id": owner_id,
+                "dob": None if dob is None else dob.strftime("%Y-%m-%d"),
                 "breed": breed,
                 "sex": sex,
                 "notes": notes,
                 "owner_first_name": owner_first_name,
                 "owner_last_name": owner_last_name,
             }
-            for (dog_id, pet_name, owner_id, breed, sex, notes, owner_first_name, owner_last_name) in cursor.fetchall()
+            for (dog_id, pet_name, owner_id, dob, breed, sex, notes, owner_first_name, owner_last_name) in cursor.fetchall()
         ]
 
 
-def add_new_dog(pet_name, owner_id, breed, sex, notes):
+def add_new_dog(pet_name, owner_id, dob, breed, sex, notes):
     with closing(
         psycopg2.connect(
             database=POSTGRES_DB,
@@ -51,14 +53,15 @@ def add_new_dog(pet_name, owner_id, breed, sex, notes):
             port=POSTGRES_PORT,
         )
     ) as conn:
+        print(dob)
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO dogs (pet_name, owner_id, breed, sex, notes) VALUES (%s, %s, %s, %s, %s)",
-            (pet_name, owner_id, breed, sex, notes),
+            "INSERT INTO dogs (pet_name, owner_id, dob, breed, sex, notes) VALUES (%s, %s, %s, %s, %s, %s)",
+            (pet_name, owner_id, dob, breed, sex, notes),
         )
         conn.commit()
 
-def modify_dog(dog_id, pet_name, owner_id, breed, sex, notes):
+def modify_dog(dog_id, pet_name, owner_id, dob, breed, sex, notes):
     with closing(
         psycopg2.connect(
             database=POSTGRES_DB,
@@ -70,8 +73,8 @@ def modify_dog(dog_id, pet_name, owner_id, breed, sex, notes):
     ) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "UPDATE dogs SET pet_name=%s, owner_id=%s, breed=%s, sex=%s, notes=%s WHERE id=%s",
-            (pet_name, owner_id, breed, sex, notes, dog_id),
+            "UPDATE dogs SET pet_name=%s, owner_id=%s, dob=%s, breed=%s, sex=%s, notes=%s WHERE id=%s",
+            (pet_name, owner_id, dob, breed, sex, notes, dog_id),
         )
         conn.commit()
 

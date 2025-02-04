@@ -11,14 +11,16 @@ INSERT INTO clients (
 );
 
 INSERT INTO dogs (
-    owner_id,
     pet_name,
+    owner_id,
+    dob,
     breed,
     sex,
     notes
 ) VALUES (
-    1,
     'Kito',
+    1,
+    '2016-05-04',
     'Unknown Terrier',
     'Male (neutered)',
     'A good boi'
