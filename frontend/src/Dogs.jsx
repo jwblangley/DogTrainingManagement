@@ -174,7 +174,7 @@ export default function Dogs() {
                             const c = clients.find(c => c.id === opt)
                             return `${`${c.first_name} ` || ''}${c.last_name || ''}`
                         }}
-                        renderInput={(params) => <TextField {...params} label="Owner" variant="standard" fullWidth />}
+                        renderInput={(params) => <TextField {...params} label="Owner" variant="standard" fullWidth required/>}
                     />
                     <TextField
                         id="breed"
