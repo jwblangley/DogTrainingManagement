@@ -90,6 +90,9 @@ export default function Dogs() {
     }
 
     const deleteDogs = () => {
+        if (!confirm("Are you sure? This action is permanent and also affects historical records")) {
+            return;
+        }
         backend.current.deleteDogs(rowSelectionModel)
             .then(() => {
                 setRowSelectionModel([])

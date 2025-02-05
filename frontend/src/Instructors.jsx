@@ -61,6 +61,9 @@ export default function Instructors() {
     }
 
     const deleteInstructors = () => {
+        if (!confirm("Are you sure? This action is permanent and also affects historical records")) {
+            return;
+        }
         backend.current.deleteInstructors(rowSelectionModel)
             .then(() => {
                 setRowSelectionModel([])

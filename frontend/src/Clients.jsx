@@ -61,6 +61,9 @@ export default function Clients() {
     }
 
     const deleteClients = () => {
+        if (!confirm("Are you sure? This action is permanent and also affects historical records")) {
+            return;
+        }
         backend.current.deleteClients(rowSelectionModel)
             .then(() => {
                 setRowSelectionModel([])
