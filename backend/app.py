@@ -15,6 +15,12 @@ from psql_adapter.dogs import add_new_dog as psql_add_new_dog
 from psql_adapter.dogs import modify_dog as psql_modify_dog
 from psql_adapter.dogs import delete_dogs as psql_delete_dogs
 
+from psql_adapter.instructors import list_instructors as psql_list_instructors
+from psql_adapter.instructors import list_instructors_details as psql_list_instructors_details
+from psql_adapter.instructors import add_new_instructor as psql_add_new_instructor
+from psql_adapter.instructors import modify_instructor as psql_modify_instructor
+from psql_adapter.instructors import delete_instructors as psql_delete_instructors
+
 
 load_dotenv()
 
@@ -119,6 +125,58 @@ def delete_dogs():
 
     psql_delete_dogs(
         request_json.get("dogs_to_delete", []),
+    )
+    return "Success"
+
+
+
+"""
+Instructors
+"""
+
+@app.route("/list-instructors")
+def list_instructors():
+    instructors_details = psql_list_instructors()
+    return jsonify(instructors_details)
+
+
+@app.route("/list-instructors-details")
+def list_instructors_details():
+    instructors_details = psql_list_instructors_details()
+    return jsonify(instructors_details)
+
+
+@app.route("/add-new-instructor", methods=["POST"])
+def add_new_instructor():
+    form_json = request.get_json()
+
+    psql_add_new_instructor(
+        form_json.get("first_name", None),
+        form_json.get("last_name", None),
+        form_json.get("email", None),
+        form_json.get("phone", None),
+    )
+    return "Success"
+
+@app.route("/modify-instructor", methods=["POST"])
+def modify_instructor():
+    form_json = request.get_json()
+
+    psql_modify_instructor(
+        form_json.get("id", None),
+        form_json.get("first_name", None),
+        form_json.get("last_name", None),
+        form_json.get("email", None),
+        form_json.get("phone", None),
+    )
+    return "Success"
+
+@app.route("/delete-instructors", methods=["POST"])
+def delete_instructors():
+    request_json = request.get_json()
+
+    psql_delete_instructors(
+        request_json.get("instructors_to_delete", []),
     )
     return "Success"
 

@@ -110,7 +110,62 @@ class BackendAdapter {
             }
         });
     }
+
+    // Instructors
+    listInstructors() {
+        return fetch(`${this.url}/list-instructors`)
+            .then(res => res.json());
+    }
+
+    listInstructorsDetails() {
+        return fetch(`${this.url}/list-instructors-details`)
+            .then(res => res.json());
+    }
+
+    addNewInstructor({ first_name, last_name, email, phone }) {
+        return fetch(`${this.url}/add-new-instructor`, {
+            method: "POST",
+            body: JSON.stringify({
+                first_name,
+                last_name,
+                email,
+                phone
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+    }
+
+    modifyInstructor(id, { first_name, last_name, email, phone }) {
+        return fetch(`${this.url}/modify-instructor`, {
+            method: "POST",
+            body: JSON.stringify({
+                id,
+                first_name,
+                last_name,
+                email,
+                phone
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+    }
+
+    deleteInstructors(instructors_to_delete) {
+        return fetch(`${this.url}/delete-instructors`, {
+            method: "POST",
+            body: JSON.stringify({
+                instructors_to_delete
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+    }
 }
+
 
 
 export default BackendAdapter

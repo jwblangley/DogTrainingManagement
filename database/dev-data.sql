@@ -25,3 +25,15 @@ INSERT INTO dogs (
     'Male (neutered)',
     'A good boi'
 );
+
+INSERT INTO instructors (
+    first_name,
+    last_name,
+    email,
+    phone
+) VALUES (
+    'Jane',
+    'Doe',
+    'janedoe@example.com',
+    '+449876543210'
+);
