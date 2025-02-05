@@ -178,7 +178,7 @@ export default function Clients() {
                     }}>
                         Cancel
                     </Button>
-                    <Button type="submit">Add</Button>
+                    <Button type="submit">{modifyingClient ? "Modify" : "Add"}</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
