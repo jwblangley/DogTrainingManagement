@@ -188,7 +188,7 @@ export default function Clients() {
                 <DialogTitle>{"Delete Selected Client(s)?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {"Delete selected client(s)?"}
+                        {"Delete selected client(s)? Please note that this will also delete any dogs with this client as their owner"}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

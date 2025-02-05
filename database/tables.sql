@@ -9,7 +9,7 @@ CREATE TABLE clients (
 CREATE TABLE dogs (
     id          SERIAL PRIMARY KEY,
     pet_name    VARCHAR(255) NOT NULL,
-    owner_id    INTEGER REFERENCES clients(id),
+    owner_id    INTEGER REFERENCES clients(id) ON DELETE CASCADE,
     dob         DATE,
     breed       VARCHAR(255),
     sex         VARCHAR(63),
