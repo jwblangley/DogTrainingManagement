@@ -1,16 +1,33 @@
 INSERT INTO clients (
+    active,
     first_name,
     last_name,
     email,
     phone
 ) VALUES (
+    TRUE,
     'John',
     'Smith',
     'johnsmith@example.com',
     '+441234567890'
 );
 
+INSERT INTO clients (
+    active,
+    first_name,
+    last_name,
+    email,
+    phone
+) VALUES (
+    FALSE,
+    'Jane',
+    'Smith',
+    'janesmith@example.com',
+    '+441234567890'
+);
+
 INSERT INTO dogs (
+    active,
     pet_name,
     owner_id,
     dob,
@@ -18,6 +35,7 @@ INSERT INTO dogs (
     sex,
     notes
 ) VALUES (
+    TRUE,
     'Kito',
     1,
     '2016-05-04',
@@ -27,11 +45,13 @@ INSERT INTO dogs (
 );
 
 INSERT INTO instructors (
+    active,
     first_name,
     last_name,
     email,
     phone
 ) VALUES (
+    TRUE,
     'Jane',
     'Doe',
     'janedoe@example.com',

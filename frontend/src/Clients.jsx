@@ -6,6 +6,10 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { BackendContext } from './BackendProvider';
 import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField } from '@mui/material';
 
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+
+
 export default function Clients() {
 
     let backend = useContext(BackendContext)
@@ -33,6 +37,15 @@ export default function Clients() {
         { field: 'last_name', headerName: 'Last name', width: 150 },
         { field: 'email', headerName: 'Email Address', width: 250 },
         { field: 'phone', headerName: 'Contact Number', width: 150 },
+        { field: 'active', headerName: 'Active', width: 75,
+            renderCell: (params) => (
+                <div style={{textAlign: "center"}}>
+                    {params.row.active
+                        ? <CheckCircleIcon color="primary" style={{transform: "translateY(6px)"}}/>
+                        : <CancelIcon style={{transform: "translateY(6px)"}}/>}
+                </div>
+            )},
+
     ];
 
     const addClient = ({firstName, lastName, email, phone}) => {
@@ -105,6 +118,7 @@ export default function Clients() {
                 gridRowId={(row) => row.id}
                 checkboxSelection
                 disableRowSelectionOnClick
+                getRowClassName={params => params.row.active ? "" : "rowInactive"}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);
                 }}

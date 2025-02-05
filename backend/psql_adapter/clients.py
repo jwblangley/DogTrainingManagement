@@ -42,17 +42,18 @@ def list_clients_details():
         )
     ) as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, first_name, last_name, email, phone FROM clients")
+        cursor.execute("SELECT id, active, first_name, last_name, email, phone FROM clients")
 
         return [
             {
                 "id": client_id,
+                "active": active,
                 "first_name": first_name,
                 "last_name": last_name,
                 "email": email,
                 "phone": phone,
             }
-            for (client_id, first_name, last_name, email, phone) in cursor.fetchall()
+            for (client_id, active, first_name, last_name, email, phone) in cursor.fetchall()
         ]
 
 

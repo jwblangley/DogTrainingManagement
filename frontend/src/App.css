@@ -5,3 +5,8 @@
     margin-right: auto;
     padding: 2vmin;
 }
+
+.rowInactive {
+    color: gray
+
+}
