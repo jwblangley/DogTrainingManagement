@@ -183,7 +183,7 @@ export default function Dogs() {
                     />
                     <Autocomplete
                         id="ownerId" name="ownerId"
-                        options={clients.map(c => c.id)}
+                        options={clients.filter(c => c.active).map(c => c.id)}
                         value={selectedOwnerId}
                         onChange={(e, v) => setSelectedOwnerId(v)}
                         getOptionLabel={opt => {
