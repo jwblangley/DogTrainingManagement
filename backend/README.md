@@ -1,5 +1,13 @@
 # Dog Training Manager Backend
 
+## Prerequisites
+
+`postgresql-client` must be installed. This can be installed on debian-based systems with:
+
+```bash
+sudo apt install postgresql-client
+```
+
 ## Setup
 
 ```bash

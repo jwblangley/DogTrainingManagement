@@ -3,6 +3,27 @@ class BackendAdapter {
         this.url = url
     }
 
+    // Backup
+
+    createBackup() {
+        const download = (uri) => {
+            const link = document.createElement("a");
+            link.href = uri;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        download(`${this.url}/create-backup`)
+    }
+
+    restoreBackup(formData) {
+        return fetch(`${this.url}/restore-backup`, {
+            method: "POST",
+            body: formData,
+        });
+    }
+
     // Clients
     listClients() {
         return fetch(`${this.url}/list-clients`)

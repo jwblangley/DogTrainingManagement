@@ -1,8 +1,12 @@
 import os
+import io
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 from dotenv import load_dotenv
+
+from psql_adapter.backup import create_backup as psql_create_backup
+from psql_adapter.backup import restore_backup as psql_restore_backup
 
 from psql_adapter.clients import list_clients as psql_list_clients
 from psql_adapter.clients import list_clients_details as psql_list_clients_details
@@ -32,6 +36,28 @@ SSL_KEY_PATH = os.getenv("SSL_KEY_PATH")
 
 app = Flask(__name__)
 CORS(app)
+
+
+"""
+Backup
+"""
+
+@app.route("/create-backup")
+def create_backup():
+    return Response(psql_create_backup(), mimetype="application/gzip")
+
+@app.route("/restore-backup", methods=["POST"])
+def restore_backup():
+    if  "backup" not in request.files:
+        return "Bad data format", 400
+    backup_file = request.files["backup"]
+    bytes = io.BytesIO()
+    backup_file.save(bytes)
+
+    if not psql_restore_backup(bytes.getvalue()):
+        return "Internal Server Error", 500
+
+    return "Success"
 
 """
 Clients
