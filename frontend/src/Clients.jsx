@@ -44,7 +44,7 @@ export default function Clients() {
                         ? <CheckCircleIcon color="primary" style={{transform: "translateY(6px)"}}/>
                         : <CancelIcon style={{transform: "translateY(6px)"}}/>}
                 </div>
-            )},
+        )},
 
     ];
 

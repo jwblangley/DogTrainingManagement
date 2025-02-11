@@ -112,6 +112,19 @@ class BackendAdapter {
         });
     }
 
+    markDogsActive(dogs_to_activate, activate) {
+        return fetch(`${this.url}/activate-dogs`, {
+            method: "POST",
+            body: JSON.stringify({
+                dogs_to_activate,
+                activate
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+    }
+
     deleteDogs(dogs_to_delete) {
         return fetch(`${this.url}/delete-dogs`, {
             method: "POST",

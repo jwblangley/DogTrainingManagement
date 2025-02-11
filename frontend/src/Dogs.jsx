@@ -10,6 +10,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { BackendContext } from './BackendProvider';
 import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField, MenuItem, Autocomplete} from '@mui/material';
 
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+
 dayjs.extend(relativeTime)
 
 export default function Dogs() {
@@ -56,6 +59,14 @@ export default function Dogs() {
         { field: 'breed', headerName: 'Breed', width: 250 },
         { field: 'sex', headerName: 'Sex', width: 150 },
         { field: 'notes', headerName: 'Notes', width: 400 },
+        { field: 'active', headerName: 'Active', width: 75,
+            renderCell: (params) => (
+                <div style={{textAlign: "center"}}>
+                    {params.row.active
+                        ? <CheckCircleIcon color="primary" style={{transform: "translateY(6px)"}}/>
+                        : <CancelIcon style={{transform: "translateY(6px)"}}/>}
+                </div>
+        )},
     ];
 
     const addDog = ({petName, ownerId, dob, breed, sex, notes}) => {
@@ -87,6 +98,15 @@ export default function Dogs() {
             setRowSelectionModel([])
             pullState()
         });
+    }
+
+    const markDogsActive = () => {
+        const willActivate = rowSelectionModel.some(id => !getDog(id).active)
+        backend.current.markDogsActive(rowSelectionModel, willActivate)
+            .then(() => {
+                setRowSelectionModel([])
+                pullState()
+            })
     }
 
     const deleteDogs = () => {
@@ -124,6 +144,15 @@ export default function Dogs() {
                 </Button>
                 <Button
                     variant="contained"
+                    onClick={markDogsActive}
+                    disabled={rowSelectionModel.length <= 0
+                        || (rowSelectionModel.some(id => getDog(id).active)
+                            && rowSelectionModel.some(id => !getDog(id).active))}
+                >
+                    Mark as {rowSelectionModel.some(id => !getDog(id).active) ? "active" : "inactive"}
+                </Button>
+                <Button
+                    variant="contained"
                     onClick={() => setDeletingDogs(true)}
                     disabled={rowSelectionModel.length <= 0}
                 >
@@ -137,6 +166,7 @@ export default function Dogs() {
                 gridRowId={(row) => row.id}
                 checkboxSelection
                 disableRowSelectionOnClick
+                getRowClassName={params => params.row.active ? "" : "rowInactive"}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);
                 }}

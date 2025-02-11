@@ -21,7 +21,7 @@ def list_dogs_details():
     ) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT dogs.id, dogs.pet_name, dogs.owner_id, dogs.dob, dogs.breed, dogs.sex, dogs.notes, clients.first_name, clients.last_name "
+            "SELECT dogs.id, dogs.pet_name, dogs.owner_id, dogs.dob, dogs.breed, dogs.sex, dogs.notes, dogs.active, clients.first_name, clients.last_name "
             "FROM dogs INNER JOIN clients "
             "ON dogs.owner_id = clients.id"
         )
@@ -36,10 +36,11 @@ def list_dogs_details():
                 "breed": breed,
                 "sex": sex,
                 "notes": notes,
+                "active": active,
                 "owner_first_name": owner_first_name,
                 "owner_last_name": owner_last_name,
             }
-            for (dog_id, pet_name, owner_id, dob, breed, sex, notes, owner_first_name, owner_last_name) in cursor.fetchall()
+            for (dog_id, pet_name, owner_id, dob, breed, sex, notes, active, owner_first_name, owner_last_name) in cursor.fetchall()
         ]
 
 
@@ -77,6 +78,26 @@ def modify_dog(dog_id, pet_name, owner_id, dob, breed, sex, notes):
             (pet_name, owner_id, dob, breed, sex, notes, dog_id),
         )
         conn.commit()
+
+def activate_dogs(dogs_to_activate, activate):
+    with closing(
+        psycopg2.connect(
+            database=POSTGRES_DB,
+            host=POSTGRES_HOST,
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+            port=POSTGRES_PORT,
+        )
+    ) as conn:
+        cursor = conn.cursor()
+        for dog_id in dogs_to_activate:
+            cursor.execute(
+                "UPDATE dogs SET active=%s WHERE id=%s",
+                ("TRUE" if activate else "FALSE", dog_id),
+            )
+
+        conn.commit()
+
 
 def delete_dogs(dogs_to_delete):
     with closing(

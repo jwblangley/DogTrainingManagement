@@ -14,6 +14,7 @@ from psql_adapter.clients import delete_clients as psql_delete_clients
 from psql_adapter.dogs import list_dogs_details as psql_list_dogs_details
 from psql_adapter.dogs import add_new_dog as psql_add_new_dog
 from psql_adapter.dogs import modify_dog as psql_modify_dog
+from psql_adapter.dogs import activate_dogs as psql_activate_dogs
 from psql_adapter.dogs import delete_dogs as psql_delete_dogs
 
 from psql_adapter.instructors import list_instructors as psql_list_instructors
@@ -127,6 +128,16 @@ def modify_dog():
         form_json.get("breed", None),
         form_json.get("sex", None),
         form_json.get("notes", None),
+    )
+    return "Success"
+
+@app.route("/activate-dogs", methods=["POST"])
+def activate_dogs():
+    form_json = request.get_json()
+
+    psql_activate_dogs(
+        form_json.get("dogs_to_activate", []),
+        form_json.get("activate", True),
     )
     return "Success"
 
