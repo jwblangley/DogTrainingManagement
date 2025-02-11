@@ -1,6 +1,6 @@
 CREATE TABLE clients (
     id          INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    active      BOOLEAN,
+    active      BOOLEAN DEFAULT TRUE,
     last_name   VARCHAR(255),
     first_name  VARCHAR(255) NOT NULL,
     email       VARCHAR(511),
@@ -9,7 +9,7 @@ CREATE TABLE clients (
 
 CREATE TABLE dogs (
     id          INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    active      BOOLEAN,
+    active      BOOLEAN DEFAULT TRUE,
     pet_name    VARCHAR(255) NOT NULL,
     owner_id    INTEGER REFERENCES clients(id) ON DELETE CASCADE,
     dob         DATE,
@@ -20,7 +20,7 @@ CREATE TABLE dogs (
 
 CREATE TABLE instructors (
     id          INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    active      BOOLEAN,
+    active      BOOLEAN DEFAULT TRUE,
     last_name   VARCHAR(255),
     first_name  VARCHAR(255) NOT NULL,
     email       VARCHAR(511),
