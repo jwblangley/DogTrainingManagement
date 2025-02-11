@@ -6,6 +6,9 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { BackendContext } from './BackendProvider';
 import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField } from '@mui/material';
 
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+
 export default function Instructors() {
 
     let backend = useContext(BackendContext)
@@ -33,6 +36,14 @@ export default function Instructors() {
         { field: 'last_name', headerName: 'Last name', width: 150 },
         { field: 'email', headerName: 'Email Address', width: 250 },
         { field: 'phone', headerName: 'Contact Number', width: 150 },
+        { field: 'active', headerName: 'Active', width: 75,
+            renderCell: (params) => (
+                <div style={{textAlign: "center"}}>
+                    {params.row.active
+                        ? <CheckCircleIcon color="primary" style={{transform: "translateY(6px)"}}/>
+                        : <CancelIcon style={{transform: "translateY(6px)"}}/>}
+                </div>
+        )},
     ];
 
     const addInstructor = ({ firstName, lastName, email, phone }) => {
@@ -58,6 +69,15 @@ export default function Instructors() {
             setRowSelectionModel([])
             pullState()
         });
+    }
+
+    const markInstructorsActive = () => {
+        const willActivate = rowSelectionModel.some(id => !getInstructor(id).active)
+        backend.current.markInstructorsActive(rowSelectionModel, willActivate)
+            .then(() => {
+                setRowSelectionModel([])
+                pullState()
+            })
     }
 
     const deleteInstructors = () => {
@@ -92,6 +112,15 @@ export default function Instructors() {
                 </Button>
                 <Button
                     variant="contained"
+                    onClick={markInstructorsActive}
+                    disabled={rowSelectionModel.length <= 0
+                        || (rowSelectionModel.some(id => getInstructor(id).active)
+                            && rowSelectionModel.some(id => !getInstructor(id).active))}
+                >
+                    Mark as {rowSelectionModel.some(id => !getInstructor(id).active) ? "active" : "inactive"}
+                </Button>
+                <Button
+                    variant="contained"
                     onClick={() => setDeletingInstructors(true)}
                     disabled={rowSelectionModel.length <= 0}
                 >
@@ -105,6 +134,7 @@ export default function Instructors() {
                 gridRowId={(row) => row.id}
                 checkboxSelection
                 disableRowSelectionOnClick
+                getRowClassName={params => params.row.active ? "" : "rowInactive"}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);
                 }}

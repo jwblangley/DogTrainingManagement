@@ -179,6 +179,19 @@ class BackendAdapter {
         });
     }
 
+    markInstructorsActive(instructors_to_activate, activate) {
+        return fetch(`${this.url}/activate-instructors`, {
+            method: "POST",
+            body: JSON.stringify({
+                instructors_to_activate,
+                activate
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+    }
+
     deleteInstructors(instructors_to_delete) {
         return fetch(`${this.url}/delete-instructors`, {
             method: "POST",

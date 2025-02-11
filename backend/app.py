@@ -21,6 +21,7 @@ from psql_adapter.instructors import list_instructors as psql_list_instructors
 from psql_adapter.instructors import list_instructors_details as psql_list_instructors_details
 from psql_adapter.instructors import add_new_instructor as psql_add_new_instructor
 from psql_adapter.instructors import modify_instructor as psql_modify_instructor
+from psql_adapter.instructors import activate_instructors as psql_activate_instructors
 from psql_adapter.instructors import delete_instructors as psql_delete_instructors
 
 
@@ -190,6 +191,16 @@ def modify_instructor():
         form_json.get("last_name", None),
         form_json.get("email", None),
         form_json.get("phone", None),
+    )
+    return "Success"
+
+@app.route("/activate-instructors", methods=["POST"])
+def activate_instructors():
+    form_json = request.get_json()
+
+    psql_activate_instructors(
+        form_json.get("instructors_to_activate", []),
+        form_json.get("activate", True),
     )
     return "Success"
 
