@@ -73,6 +73,15 @@ export default function Clients() {
         });
     }
 
+    const markClientsActive = () => {
+        const willActivate = rowSelectionModel.some(id => !getClient(id).active)
+        backend.current.markClientsActive(rowSelectionModel, willActivate)
+            .then(() => {
+                setRowSelectionModel([])
+                pullState()
+            })
+    }
+
     const deleteClients = () => {
         if (!confirm("Are you sure? This action is permanent and also affects historical records")) {
             return;
@@ -102,6 +111,15 @@ export default function Clients() {
                     disabled={rowSelectionModel.length !== 1}
                 >
                     Modify
+                </Button>
+                <Button
+                    variant="contained"
+                    onClick={markClientsActive}
+                    disabled={rowSelectionModel.length <= 0
+                            || (rowSelectionModel.some(id => getClient(id).active)
+                                && rowSelectionModel.some(id => !getClient(id).active))}
+                >
+                    Mark as {rowSelectionModel.some(id => !getClient(id).active) ? "active" : "inactive"}
                 </Button>
                 <Button
                     variant="contained"

@@ -91,6 +91,25 @@ def modify_client(client_id, first_name, last_name, email, phone):
         )
         conn.commit()
 
+def activate_clients(clients_to_activate, activate):
+    with closing(
+        psycopg2.connect(
+            database=POSTGRES_DB,
+            host=POSTGRES_HOST,
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+            port=POSTGRES_PORT,
+        )
+    ) as conn:
+        cursor = conn.cursor()
+        for client_id in clients_to_activate:
+            cursor.execute(
+                "UPDATE clients SET active=%s WHERE id=%s",
+                ("TRUE" if activate else "FALSE", client_id),
+            )
+
+        conn.commit()
+
 def delete_clients(clients_to_delete):
     with closing(
         psycopg2.connect(
