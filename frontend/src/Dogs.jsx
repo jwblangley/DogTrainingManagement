@@ -174,7 +174,12 @@ export default function Dogs() {
                 slots={{
                     toolbar: GridToolbar,
                 }}
-                initialState={{ pagination: { page: 0, pageSize: 10 } }}
+                initialState={{
+                    pagination: { page: 0, pageSize: 10 },
+                    sorting: {
+                        sortModel: [{ field: "active", sort: 'desc' }],
+                    },
+                }}
                 pageSizeOptions={[5, 10]}
             />
             <Dialog
@@ -271,6 +276,7 @@ export default function Dogs() {
                         name="notes"
                         label="Notes"
                         fullWidth
+                        multiline
                         variant="standard"
                         defaultValue={modifyingDog ? getDog(rowSelectionModel[0]).notes : ""}
                     />

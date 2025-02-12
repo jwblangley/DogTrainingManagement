@@ -142,7 +142,12 @@ export default function Instructors() {
                 slots={{
                     toolbar: GridToolbar,
                 }}
-                initialState={{ pagination: { page: 0, pageSize: 10 } }}
+                initialState={{
+                    pagination: { page: 0, pageSize: 10 },
+                    sorting: {
+                        sortModel: [{ field: "active", sort: 'desc' }],
+                    },
+                }}
                 pageSizeOptions={[5, 10]}
             />
             <Dialog
