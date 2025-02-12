@@ -14,6 +14,8 @@ import Clients from './Clients';
 import Dogs from './Dogs';
 import Instructors from './Instructors';
 import Sessions from './Sessions';
+import Session from './Session';
+import Finances from './Finances';
 import { BackendProvider } from './BackendProvider';
 
 
@@ -28,11 +30,14 @@ function App() {
             <NavBar />
             <Paper className="bodyPaper">
               <Routes>
-                <Route path='/'            element={<Home />} />
+                <Route index               element={<Home />} />
+                <Route path='*'            element={<Home />} />
                 <Route path='/clients'     element={<Clients />} />
                 <Route path='/dogs'        element={<Dogs />} />
                 <Route path='/instructors' element={<Instructors />} />
                 <Route path='/sessions'    element={<Sessions />} />
+                <Route path='/session'     element={<Session />} />
+                <Route path='/finances'    element={<Finances />} />
               </Routes>
             </Paper>
           </Router>
