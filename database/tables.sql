@@ -29,5 +29,6 @@ CREATE TABLE instructors (
 
 CREATE TABLE sessions (
     id          INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    date_time   TIMESTAMP NOT NULL
+    date_time   TIMESTAMP NOT NULL,
+    title       VARCHAR(1023)
 )

@@ -59,7 +59,9 @@ INSERT INTO instructors (
 );
 
 INSERT INTO sessions (
-    date_time
+    date_time,
+    title
 ) VALUES (
-    '2025-02-10T17:30'
+    '2025-02-10T17:30',
+    'How to sit for beginners'
 );

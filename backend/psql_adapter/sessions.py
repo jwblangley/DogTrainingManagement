@@ -20,12 +20,13 @@ def list_sessions():
         )
     ) as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, date_time FROM sessions")
+        cursor.execute("SELECT id, date_time, title FROM sessions")
 
         return [
             {
                 "id": session_id,
                 "date_time": date_time.replace(microsecond=0).isoformat(),
+                "title": title
             }
-            for (session_id, date_time) in cursor.fetchall()
+            for (session_id, date_time, title) in cursor.fetchall()
         ]

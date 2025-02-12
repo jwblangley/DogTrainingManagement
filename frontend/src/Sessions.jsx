@@ -35,6 +35,7 @@ export default function Sessions() {
                 return dayjs(row.date_time, "YYYY-MM-DDTHH:mm:ss").format("HH:mm")
             }
         },
+        { field: 'title', headerName: 'Title', width: 350 },
         { field: 'num_instructors', headerName: '# Instructors', width: 150 },
         { field: 'num_dogs', headerName: '# Dogs', width: 150 },
         { field: 'num_clients', headerName: '# Clients', width: 150 },
