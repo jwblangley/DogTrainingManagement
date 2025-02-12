@@ -26,7 +26,7 @@ export default function Instructors() {
     }
 
     const getInstructor = (instructorId) => {
-        return instructors.find(c => c.id === instructorId)
+        return instructors.find(i => i.id === instructorId)
     }
 
     useEffect(pullState, [])
