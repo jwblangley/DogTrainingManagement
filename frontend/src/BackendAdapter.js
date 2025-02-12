@@ -224,6 +224,13 @@ class BackendAdapter {
             }
         });
     }
+
+    // Sessions
+
+    listSessions() {
+        return fetch(`${this.url}/list-sessions`)
+            .then(res => res.json());
+    }
 }
 
 

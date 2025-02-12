@@ -26,3 +26,8 @@ CREATE TABLE instructors (
     email       VARCHAR(511),
     phone       VARCHAR(31)
 );
+
+CREATE TABLE sessions (
+    id          INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    date_time   TIMESTAMP NOT NULL
+)

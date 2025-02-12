@@ -28,6 +28,8 @@ from psql_adapter.instructors import modify_instructor as psql_modify_instructor
 from psql_adapter.instructors import activate_instructors as psql_activate_instructors
 from psql_adapter.instructors import delete_instructors as psql_delete_instructors
 
+from psql_adapter.sessions import list_sessions as psql_list_sessions
+
 
 load_dotenv()
 
@@ -238,6 +240,15 @@ def delete_instructors():
         request_json.get("instructors_to_delete", []),
     )
     return "Success"
+
+
+"""
+Sessions
+"""
+
+@app.route("/list-sessions")
+def list_sessions():
+    return jsonify(psql_list_sessions())
 
 
 if __name__ == "__main__":

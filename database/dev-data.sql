@@ -57,3 +57,9 @@ INSERT INTO instructors (
     'janedoe@example.com',
     '+449876543210'
 );
+
+INSERT INTO sessions (
+    date_time
+) VALUES (
+    '2025-02-10T17:30'
+);

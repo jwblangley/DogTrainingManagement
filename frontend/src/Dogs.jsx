@@ -55,7 +55,7 @@ export default function Dogs() {
 
                 return dayjs(row.dob, "YYYY-MM-DD").fromNow(true)
             }
-         },
+        },
         { field: 'breed', headerName: 'Breed', width: 250 },
         { field: 'sex', headerName: 'Sex', width: 150 },
         { field: 'notes', headerName: 'Notes', width: 400 },
