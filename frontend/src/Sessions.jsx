@@ -22,6 +22,10 @@ export default function Sessions() {
         })
     }
 
+    const rowClick = (params) => {
+        window.location.href = `/session?id=${params.row.id}`
+    }
+
     useEffect(pullState, [])
 
     const columns = [
@@ -58,7 +62,13 @@ export default function Sessions() {
                 columns={columns}
                 gridRowId={(row) => row.id}
                 disableRowSelectionOnClick
+                onRowClick={rowClick}
                 getRowClassName={params => dayjs(params.row.date_time, "YYYY-MM-DDTHH:mm:ss") > dayjs() ? "" : "rowInactive"}
+                sx = {{
+                    '& .MuiDataGrid-row:hover': {
+                        cursor: 'pointer'
+                    }
+                }}
                 slots={{
                     toolbar: GridToolbar,
                 }}
