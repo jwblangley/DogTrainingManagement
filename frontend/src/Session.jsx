@@ -7,6 +7,10 @@ export default function Sessions() {
     const [searchParams] = useSearchParams();
     const id = searchParams.get("id")
 
+    // TODO: do this conditionally
+    window.onbeforeunload = () => "Are you sure?"
+    // window.onbeforeunload = null
+
     return (
         <div>
             <Typography>Session</Typography>

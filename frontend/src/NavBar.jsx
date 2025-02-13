@@ -1,7 +1,5 @@
 import * as React from 'react'
 
-import { useNavigate } from "react-router-dom";
-
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -13,7 +11,10 @@ export default function NavBar() {
 
     const pages = ['clients', 'dogs', 'instructors', 'sessions', 'finances']
 
-    const navigate = useNavigate()
+    // Don't use useNavigate as it does not respect onbeforeunload
+    const navigate = (uri) => {
+        window.location.href = `/${uri}`
+    }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
