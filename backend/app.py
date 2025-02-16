@@ -249,10 +249,12 @@ def list_session_details():
 def save_session():
     request_json = request.get_json()
 
-    psql_save_session(
+    saved_id = psql_save_session(
         request_json.get("session", {}),
     )
-    return "Success"
+    return {
+        "session_id": saved_id
+    }
 
 @app.route("/delete-session", methods=["POST"])
 def delete_session():

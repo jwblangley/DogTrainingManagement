@@ -35,13 +35,15 @@ export default function Sessions() {
 
 
     const pullState = () => {
-        backend.current.listSessionDetails(sessionId).then(data => {
-            setTitle(data?.title)
-            setNotes(data?.notes)
-            setDateTime(dayjs(data?.date_time, "YYYY-MM-DDTHH:mm:ss"))
-            setInstructorIds(data?.instructor_ids)
-            setDogIds(data?.dog_ids)
-        })
+        if (sessionId !== "new") {
+            backend.current.listSessionDetails(sessionId).then(data => {
+                setTitle(data?.title)
+                setNotes(data?.notes)
+                setDateTime(dayjs(data?.date_time, "YYYY-MM-DDTHH:mm:ss"))
+                setInstructorIds(data?.instructor_ids)
+                setDogIds(data?.dog_ids)
+            })
+        }
 
         backend.current.listInstructors().then(data => {
             setInstructors(data)
@@ -59,7 +61,15 @@ export default function Sessions() {
             notes,
             instructor_ids: instructorIds,
             dog_ids: dogIds,
-        }).then(() => setFieldsDirty(false))
+        }).then(resp => resp.json())
+        .then((resp) => {
+            if (sessionId === "new") {
+                window.onbeforeunload=null
+                window.location.href = `/session?id=${resp.session_id}`
+            } else {
+                setFieldsDirty(false)
+            }
+        })
     }
 
     const deleteSession = () => {

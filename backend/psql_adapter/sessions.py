@@ -23,9 +23,9 @@ def list_sessions():
         cursor.execute(
             "SELECT sessions.id, sessions.date_time, sessions.title, "
             "COUNT(DISTINCT session_instructors.instructor_id), COUNT(DISTINCT session_dogs.dog_id), COUNT(DISTINCT dogs.owner_id) FROM sessions "
-            "INNER JOIN session_instructors ON sessions.id = session_instructors.session_id "
-            "INNER JOIN session_dogs ON sessions.id = session_dogs.session_id "
-            "INNER JOIN dogs ON session_dogs.dog_id = dogs.id "
+            "LEFT JOIN session_instructors ON sessions.id = session_instructors.session_id "
+            "LEFT JOIN session_dogs ON sessions.id = session_dogs.session_id "
+            "LEFT JOIN dogs ON session_dogs.dog_id = dogs.id "
             "GROUP BY sessions.id"
 
         )
@@ -55,8 +55,8 @@ def list_session_details(session_id):
         cursor = conn.cursor()
         cursor.execute(
             "SELECT sessions.id, sessions.date_time, sessions.title, sessions.notes, session_instructors.instructor_id, session_dogs.dog_id FROM sessions "
-            "INNER JOIN session_instructors ON sessions.id = session_instructors.session_id "
-            "INNER JOIN session_dogs ON sessions.id = session_dogs.session_id "
+            "LEFT JOIN session_instructors ON sessions.id = session_instructors.session_id "
+            "LEFT JOIN session_dogs ON sessions.id = session_dogs.session_id "
             "WHERE sessions.id = %s", (session_id, )
         )
 
@@ -82,8 +82,8 @@ def list_session_details(session_id):
             "date_time": date_time.replace(microsecond=0).isoformat(),
             "title": title,
             "notes": notes,
-            "instructor_ids": list(instructor_ids),
-            "dog_ids": list(dog_ids),
+            "instructor_ids": list(i for i in instructor_ids if i is not None),
+            "dog_ids": list(d for d in dog_ids if d is not None),
         }
 
         return result
@@ -102,13 +102,15 @@ def save_session(session):
         cursor = conn.cursor()
 
         if session["id"] == "new":
-            # TODO
-            return
+            cursor.execute("INSERT INTO sessions (date_time, title, notes) VALUES (%s, %s, %s) RETURNING id",
+                           (session["date_time"], session["title"], session["notes"]))
+            session["id"] = cursor.fetchone()[0]
+        else:
+            cursor.execute(
+                "UPDATE sessions SET date_time=%s, title=%s, notes=%s "
+                "WHERE id=%s", (session["date_time"], session["title"], session["notes"], session["id"])
+            )
 
-        cursor.execute(
-            "UPDATE sessions SET date_time=%s, title=%s, notes=%s "
-            "WHERE id=%s", (session["date_time"], session["title"], session["notes"], session["id"])
-        )
         cursor.execute("DELETE FROM session_instructors WHERE session_id=%s", (session["id"], ))
         for instructor_id in session["instructor_ids"]:
             cursor.execute("INSERT INTO session_instructors (session_id, instructor_id) VALUES (%s, %s)", (session["id"], instructor_id))
@@ -117,6 +119,8 @@ def save_session(session):
             cursor.execute("INSERT INTO session_dogs (session_id, dog_id) VALUES (%s, %s)", (session["id"], dog_id))
 
         conn.commit()
+
+        return session["id"]
 
 
 def delete_session(session_id):
