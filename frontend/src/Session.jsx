@@ -5,7 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Button, Stack, Typography, Paper, TextField } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-
+import { DataGrid } from '@mui/x-data-grid';
 
 import { BackendContext } from './BackendProvider';
 
@@ -20,6 +20,12 @@ export default function Sessions() {
     const [notes, setNotes] = useState("")
     const [dateTime, setDateTime] = useState(dayjs())
 
+    const [instructors, setInstructors] = useState([])
+    const [instructorIds, setInstructorIds] = useState([])
+
+    const [dogs, setDogs] = useState([])
+    const [dogIds, setDogIds] = useState([])
+
     const [fieldsDirty, setFieldsDirty] = useState(false)
 
 
@@ -28,6 +34,15 @@ export default function Sessions() {
             setTitle(data?.title)
             setNotes(data?.notes)
             setDateTime(dayjs(data?.date_time, "YYYY-MM-DDTHH:mm:ss"))
+            setInstructorIds(data?.instructor_ids)
+            setDogIds(data?.dog_ids)
+        })
+
+        backend.current.listInstructors().then(data => {
+            setInstructors(data)
+        })
+        backend.current.listDogs().then(data => {
+            setDogs(data)
         })
     }
 
@@ -50,6 +65,16 @@ export default function Sessions() {
 
     useEffect(pullState, [])
     useEffect(setOnBeforeUnload, [fieldsDirty])
+
+
+    const Instructorcolumns = [
+        {
+            field: 'full_name', headerName: 'Name', width: 250,
+            valueGetter: (value, row) => `${`${row.first_name} ` || ''}${row.last_name || ''}`
+        },
+        { field: 'email', headerName: 'Email Address', width: 250 },
+        { field: 'phone', headerName: 'Contact Number', width: 150 },
+    ];
 
     return (
         <div>
@@ -104,7 +129,19 @@ export default function Sessions() {
                     </Stack>
                 </Paper>
                 <Paper sx={{padding: 2, width: "50%"}}>
-                    Form
+                    <Stack spacing={2} direction="column">
+                        <Typography variant="h5">Instructors</Typography>
+                        <DataGrid
+                            rows={instructors.filter(i => instructorIds.includes(i.id))}
+                            columns={Instructorcolumns}
+                            gridRowId={(row) => row.id}
+                            disableRowSelectionOnClick
+                            initialState={{
+                                pagination: { page: 0, pageSize: 10 },
+                            }}
+                            pageSizeOptions={[5, 10]}
+                        />
+                    </Stack>
                 </Paper>
             </Stack>
         </div>
