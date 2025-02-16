@@ -9,20 +9,18 @@ from psql_adapter.backup import create_backup as psql_create_backup
 from psql_adapter.backup import restore_backup as psql_restore_backup
 
 from psql_adapter.clients import list_clients as psql_list_clients
-from psql_adapter.clients import list_clients_details as psql_list_clients_details
 from psql_adapter.clients import add_new_client as psql_add_new_client
 from psql_adapter.clients import modify_client as psql_modify_client
 from psql_adapter.clients import activate_clients as psql_activate_clients
 from psql_adapter.clients import delete_clients as psql_delete_clients
 
-from psql_adapter.dogs import list_dogs_details as psql_list_dogs_details
+from psql_adapter.dogs import list_dogs as psql_list_dogs
 from psql_adapter.dogs import add_new_dog as psql_add_new_dog
 from psql_adapter.dogs import modify_dog as psql_modify_dog
 from psql_adapter.dogs import activate_dogs as psql_activate_dogs
 from psql_adapter.dogs import delete_dogs as psql_delete_dogs
 
 from psql_adapter.instructors import list_instructors as psql_list_instructors
-from psql_adapter.instructors import list_instructors_details as psql_list_instructors_details
 from psql_adapter.instructors import add_new_instructor as psql_add_new_instructor
 from psql_adapter.instructors import modify_instructor as psql_modify_instructor
 from psql_adapter.instructors import activate_instructors as psql_activate_instructors
@@ -69,15 +67,8 @@ Clients
 
 @app.route("/list-clients")
 def list_clients():
-    clients_details = psql_list_clients()
-    return jsonify(clients_details)
-
-
-@app.route("/list-clients-details")
-def list_clients_details():
-    clients_details = psql_list_clients_details()
-    return jsonify(clients_details)
-
+    clients = psql_list_clients()
+    return jsonify(clients)
 
 @app.route("/add-new-client", methods=["POST"])
 def add_new_client():
@@ -127,10 +118,10 @@ def delete_clients():
 Dogs
 """
 
-@app.route("/list-dogs-details")
-def list_dogs_details():
-    dogs_details = psql_list_dogs_details()
-    return jsonify(dogs_details)
+@app.route("/list-dogs")
+def list_dogs():
+    dogs = psql_list_dogs()
+    return jsonify(dogs)
 
 
 @app.route("/add-new-dog", methods=["POST"])
@@ -189,14 +180,8 @@ Instructors
 
 @app.route("/list-instructors")
 def list_instructors():
-    instructors_details = psql_list_instructors()
-    return jsonify(instructors_details)
-
-
-@app.route("/list-instructors-details")
-def list_instructors_details():
-    instructors_details = psql_list_instructors_details()
-    return jsonify(instructors_details)
+    instructors = psql_list_instructors()
+    return jsonify(instructors)
 
 
 @app.route("/add-new-instructor", methods=["POST"])

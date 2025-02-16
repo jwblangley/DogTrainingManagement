@@ -30,11 +30,6 @@ class BackendAdapter {
             .then(res => res.json());
     }
 
-    listClientsDetails() {
-        return fetch(`${this.url}/list-clients-details`)
-            .then(res => res.json());
-    }
-
     addNewClient({first_name, last_name, email, phone}) {
         return fetch(`${this.url}/add-new-client`, {
             method: "POST",
@@ -93,8 +88,8 @@ class BackendAdapter {
 
 
     // Dogs
-    listDogsDetails() {
-        return fetch(`${this.url}/list-dogs-details`)
+    listDogs() {
+        return fetch(`${this.url}/list-dogs`)
             .then(res => res.json());
     }
 
@@ -164,8 +159,8 @@ class BackendAdapter {
             .then(res => res.json());
     }
 
-    listInstructorsDetails() {
-        return fetch(`${this.url}/list-instructors-details`)
+    listInstructors() {
+        return fetch(`${this.url}/list-instructors`)
             .then(res => res.json());
     }
 

@@ -28,7 +28,7 @@ export default function Dogs() {
     const [selectedOwnerId, setSelectedOwnerId] = useState(null);
 
     const pullState = () => {
-        backend.current.listDogsDetails().then(data => {
+        backend.current.listDogs().then(data => {
             setDogs(data)
         })
         backend.current.listClients().then(data => {

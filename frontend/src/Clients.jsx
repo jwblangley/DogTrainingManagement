@@ -21,7 +21,7 @@ export default function Clients() {
     const [deletingClients, setDeletingClients] = useState(false);
 
     const pullState = () => {
-        backend.current.listClientsDetails().then(data => {
+        backend.current.listClients().then(data => {
             setClients(data)
         })
     }

@@ -20,7 +20,7 @@ export default function Instructors() {
     const [deletingInstructors, setDeletingInstructors] = useState(false);
 
     const pullState = () => {
-        backend.current.listInstructorsDetails().then(data => {
+        backend.current.listInstructors().then(data => {
             setInstructors(data)
         })
     }

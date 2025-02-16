@@ -20,29 +20,6 @@ def list_clients():
         )
     ) as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, first_name, last_name, active FROM clients")
-
-        return [
-            {
-                "id": client_id,
-                "first_name": first_name,
-                "last_name": last_name,
-                "active": active,
-            }
-            for (client_id, first_name, last_name, active) in cursor.fetchall()
-        ]
-
-def list_clients_details():
-    with closing(
-        psycopg2.connect(
-            database=POSTGRES_DB,
-            host=POSTGRES_HOST,
-            user=POSTGRES_USER,
-            password=POSTGRES_PASSWORD,
-            port=POSTGRES_PORT,
-        )
-    ) as conn:
-        cursor = conn.cursor()
         cursor.execute("SELECT id, active, first_name, last_name, email, phone FROM clients")
 
         return [

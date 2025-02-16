@@ -9,7 +9,7 @@ from psql_adapter.config import POSTGRES_PORT
 from psql_adapter.config import POSTGRES_DB
 
 
-def list_dogs_details():
+def list_dogs():
     with closing(
         psycopg2.connect(
             database=POSTGRES_DB,
