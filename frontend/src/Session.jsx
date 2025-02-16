@@ -55,7 +55,8 @@ export default function Sessions() {
             title,
             date_time: dateTime.format("YYYY-MM-DDTHH:mm:ss"),
             notes,
-            instructor_ids: instructorIds
+            instructor_ids: instructorIds,
+            dog_ids: dogIds,
         }).then(() => setFieldsDirty(false))
     }
 
@@ -92,6 +93,42 @@ export default function Sessions() {
             )
         },
     ];
+
+    const dogColumns = [
+        { field: 'pet_name', headerName: 'Pet\'s name', width: 150 },
+        {
+            field: 'owner_full_name', headerName: 'Owner\'s name', width: 300,
+            valueGetter: (value, row) => `${`${row.owner_first_name} ` || ''}${row.owner_last_name || ''}`
+        },
+        {
+            field: 'age', headerName: 'Age', width: 150,
+            valueGetter: (value, row) => {
+                if (row.dob === null) {
+                    return ""
+                }
+
+                return dayjs(row.dob, "YYYY-MM-DD").fromNow(true)
+            }
+        },
+        { field: 'breed', headerName: 'Breed', width: 250 },
+        { field: 'sex', headerName: 'Sex', width: 150 },
+        { field: 'notes', headerName: 'Notes', width: 400 },
+        {
+            field: 'remove', headerName: 'Remove', width: 75,
+            renderCell: (params) => (
+                <div style={{ textAlign: "center" }}>
+                    <ClearIcon
+                        sx={{cursor: "pointer"}}
+                        onClick={() => {
+                            setDogIds(prev => prev.filter(i => i !== params.row.id))
+                            setFieldsDirty(true)
+                        }}
+                    />
+                </div>
+            )
+        },
+    ];
+
 
     return (
         <div>
@@ -185,6 +222,22 @@ export default function Sessions() {
                     </Stack>
                 </Paper>
             </Stack>
+            <br />
+            <Paper sx={{ padding: 2, width: "100%" }}>
+                <Stack spacing={2} direction="column">
+                    <Typography variant="h5">Dogs</Typography>
+                    <DataGrid
+                        rows={dogs.filter(d => dogIds.includes(d.id))}
+                        columns={dogColumns}
+                        gridRowId={(row) => row.id}
+                        disableRowSelectionOnClick
+                        initialState={{
+                            pagination: { page: 0, pageSize: 10 },
+                        }}
+                        pageSizeOptions={[5, 10]}
+                    />
+                </Stack>
+            </Paper>
         </div>
     )
 }

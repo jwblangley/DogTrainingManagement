@@ -112,5 +112,8 @@ def save_session(session):
         cursor.execute("DELETE FROM session_instructors WHERE session_id=%s", (session["id"], ))
         for instructor_id in session["instructor_ids"]:
             cursor.execute("INSERT INTO session_instructors (session_id, instructor_id) VALUES (%s, %s)", (session["id"], instructor_id))
+        cursor.execute("DELETE FROM session_dogs WHERE session_id=%s", (session["id"], ))
+        for dog_id in session["dog_ids"]:
+            cursor.execute("INSERT INTO session_dogs (session_id, dog_id) VALUES (%s, %s)", (session["id"], dog_id))
 
         conn.commit()
