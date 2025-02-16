@@ -54,10 +54,10 @@ def list_session_details(session_id):
     ) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT sessions.id, sessions.date_time, sessions.title, session_instructors.instructor_id, session_dogs.dog_id FROM sessions "
+            "SELECT sessions.id, sessions.date_time, sessions.title, sessions.notes, session_instructors.instructor_id, session_dogs.dog_id FROM sessions "
             "INNER JOIN session_instructors ON sessions.id = session_instructors.session_id "
             "INNER JOIN session_dogs ON sessions.id = session_dogs.session_id "
-            "WHERE sessions.id = %s", session_id
+            "WHERE sessions.id = %s", (session_id, )
         )
 
         rows = cursor.fetchall()
@@ -71,15 +71,38 @@ def list_session_details(session_id):
         assert len(titles := set(row[2] for row in rows)) == 1
         title = list(titles)[0]
 
-        instructor_ids = set(row[3] for row in rows)
-        dog_ids = set(row[4] for row in rows)
+        assert len(notess := set(row[3] for row in rows)) == 1
+        notes = list(notess)[0]
+
+        instructor_ids = set(row[4] for row in rows)
+        dog_ids = set(row[5] for row in rows)
 
         result = {
             "id": session_id,
-            "date_time": date_time,
+            "date_time": date_time.replace(microsecond=0).isoformat(),
             "title": title,
+            "notes": notes,
             "instructor_ids": list(instructor_ids),
             "dog_ids": list(dog_ids),
         }
 
         return result
+
+
+def save_session(session):
+    with closing(
+        psycopg2.connect(
+            database=POSTGRES_DB,
+            host=POSTGRES_HOST,
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+            port=POSTGRES_PORT,
+        )
+    ) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE sessions SET date_time=%s, title=%s, notes=%s "
+            "WHERE id=%s", (session["date_time"], session["title"], session["notes"], session["id"])
+        )
+
+        conn.commit()

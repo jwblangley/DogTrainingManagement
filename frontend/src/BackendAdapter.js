@@ -236,6 +236,16 @@ class BackendAdapter {
         return fetch(`${this.url}/list-session-details?id=${id}`)
             .then(res => res.json());
     }
+
+    saveSession(session) {
+        return fetch(`${this.url}/save-session`, {
+            method: "POST",
+            body: JSON.stringify({session}),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+    }
 }
 
 

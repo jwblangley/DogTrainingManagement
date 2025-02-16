@@ -96,10 +96,12 @@ INSERT INTO instructors (
 
 INSERT INTO sessions (
     date_time,
-    title
+    title,
+    notes
 ) VALUES (
     '2025-02-10T17:30',
-    'How to sit for beginners'
+    'How to sit for beginners',
+    'Step 1: sit, Step 2: success!'
 );
 
 INSERT INTO session_instructors (

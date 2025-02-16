@@ -30,7 +30,8 @@ CREATE TABLE instructors (
 CREATE TABLE sessions (
     id          INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     date_time   TIMESTAMP NOT NULL,
-    title       VARCHAR(1023)
+    title       VARCHAR(1023) NOT NULL,
+    notes       VARCHAR(4095)
 );
 
 CREATE TABLE session_instructors (

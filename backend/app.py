@@ -30,6 +30,7 @@ from psql_adapter.instructors import delete_instructors as psql_delete_instructo
 
 from psql_adapter.sessions import list_sessions as psql_list_sessions
 from psql_adapter.sessions import list_session_details as psql_list_session_details
+from psql_adapter.sessions import save_session as psql_save_session
 
 
 load_dotenv()
@@ -258,6 +259,14 @@ def list_session_details():
         return "Bad request", 400
     return jsonify(psql_list_session_details(session_id))
 
+@app.route("/save-session", methods=["POST"])
+def save_session():
+    request_json = request.get_json()
+
+    psql_save_session(
+        request_json.get("session", []),
+    )
+    return "Success"
 
 if __name__ == "__main__":
     ssl_context = (
