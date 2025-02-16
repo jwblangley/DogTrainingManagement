@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime'
 
 import { useState, useEffect, useContext } from 'react';
 
@@ -12,8 +11,6 @@ import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, Dialo
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-
-dayjs.extend(relativeTime)
 
 export default function Dogs() {
 
