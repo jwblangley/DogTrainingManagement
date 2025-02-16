@@ -29,6 +29,7 @@ from psql_adapter.instructors import activate_instructors as psql_activate_instr
 from psql_adapter.instructors import delete_instructors as psql_delete_instructors
 
 from psql_adapter.sessions import list_sessions as psql_list_sessions
+from psql_adapter.sessions import list_session_details as psql_list_session_details
 
 
 load_dotenv()
@@ -249,6 +250,13 @@ Sessions
 @app.route("/list-sessions")
 def list_sessions():
     return jsonify(psql_list_sessions())
+
+@app.route("/list-session-details")
+def list_session_details():
+    session_id = request.args.get("id", None)
+    if session_id is None:
+        return "Bad request", 400
+    return jsonify(psql_list_session_details(session_id))
 
 
 if __name__ == "__main__":

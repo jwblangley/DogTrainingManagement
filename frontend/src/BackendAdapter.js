@@ -231,6 +231,11 @@ class BackendAdapter {
         return fetch(`${this.url}/list-sessions`)
             .then(res => res.json());
     }
+
+    listSessionDetails(id) {
+        return fetch(`${this.url}/list-session-details?id=${id}`)
+            .then(res => res.json());
+    }
 }
 
 
