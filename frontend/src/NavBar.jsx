@@ -24,7 +24,7 @@ export default function NavBar() {
                         size='large'
                         edge='start'
                         color='inherit'
-                        onClick={() => navigate('/')}
+                        onClick={() => navigate('home')}
                         sx={{ marginRight: 2 }}
                     >
                         <PetsIcon />
