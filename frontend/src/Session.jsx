@@ -160,7 +160,7 @@ export default function Sessions() {
                 <Button
                     variant="contained"
                     onClick={() => setDeletingSession(true)}
-                    disabled={fieldsDirty}
+                    disabled={fieldsDirty || sessionId === "new"}
                 >
                     Delete
                 </Button>
