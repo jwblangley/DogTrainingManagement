@@ -7,6 +7,8 @@ import { Button, Stack, Typography, Paper, TextField, Autocomplete } from '@mui/
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { DataGrid } from '@mui/x-data-grid';
 
+import ClearIcon from '@mui/icons-material/Clear';
+
 import { BackendContext } from './BackendProvider';
 
 
@@ -75,6 +77,20 @@ export default function Sessions() {
         },
         { field: 'email', headerName: 'Email Address', width: 250 },
         { field: 'phone', headerName: 'Contact Number', width: 150 },
+        {
+            field: 'remove', headerName: 'Remove', width: 75,
+            renderCell: (params) => (
+                <div style={{ textAlign: "center" }}>
+                    <ClearIcon
+                        sx={{cursor: "pointer"}}
+                        onClick={() => {
+                            setInstructorIds(prev => prev.filter(i => i !== params.row.id))
+                            setFieldsDirty(true)
+                        }}
+                    />
+                </div>
+            )
+        },
     ];
 
     return (
