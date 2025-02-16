@@ -28,6 +28,7 @@ export default function Sessions() {
 
     const [dogs, setDogs] = useState([])
     const [dogIds, setDogIds] = useState([])
+    const [dogAutocomplete, setDogAutocomplete] = useState("")
 
     const [fieldsDirty, setFieldsDirty] = useState(false)
 
@@ -226,6 +227,30 @@ export default function Sessions() {
             <Paper sx={{ padding: 2, width: "100%" }}>
                 <Stack spacing={2} direction="column">
                     <Typography variant="h5">Dogs</Typography>
+                    <Autocomplete
+                        options={dogs.filter(d => d.active && !dogIds.includes(d.id)).map(d => d.id)}
+                        inputValue={dogAutocomplete}
+                        onInputChange={(e, v, reason) => {
+                            if (reason === "input") {
+                                setDogAutocomplete(v)
+                            }
+                        }}
+                        onChange={(e, v) => {
+                            if (v !== null) {
+                                setDogIds(prev => [...prev, v])
+                                setDogAutocomplete("")
+                                setFieldsDirty(true)
+                            }
+                        }}
+                        getOptionLabel={opt => {
+                            if (opt === null) {
+                                return ""
+                            }
+                            const d = dogs.find(d => d.id === opt)
+                            return `${d.pet_name} (${`${d.owner_first_name} ` || ''}${d.owner_last_name || ''})`
+                        }}
+                        renderInput={(params) => <TextField {...params} label="Add a dog" variant="standard" fullWidth />}
+                    />
                     <DataGrid
                         rows={dogs.filter(d => dogIds.includes(d.id))}
                         columns={dogColumns}
