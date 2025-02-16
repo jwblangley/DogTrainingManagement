@@ -235,7 +235,21 @@ class BackendAdapter {
     saveSession(session) {
         return fetch(`${this.url}/save-session`, {
             method: "POST",
-            body: JSON.stringify({session}),
+            body: JSON.stringify({
+                session
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+    }
+
+    deleteSession(id) {
+        return fetch(`${this.url}/delete-session`, {
+            method: "POST",
+            body: JSON.stringify({
+                id
+            }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             }

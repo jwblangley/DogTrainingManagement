@@ -29,6 +29,7 @@ from psql_adapter.instructors import delete_instructors as psql_delete_instructo
 from psql_adapter.sessions import list_sessions as psql_list_sessions
 from psql_adapter.sessions import list_session_details as psql_list_session_details
 from psql_adapter.sessions import save_session as psql_save_session
+from psql_adapter.sessions import delete_session as psql_delete_session
 
 
 load_dotenv()
@@ -250,6 +251,15 @@ def save_session():
 
     psql_save_session(
         request_json.get("session", {}),
+    )
+    return "Success"
+
+@app.route("/delete-session", methods=["POST"])
+def delete_session():
+    request_json = request.get_json()
+
+    psql_delete_session(
+        request_json.get("id", None),
     )
     return "Success"
 

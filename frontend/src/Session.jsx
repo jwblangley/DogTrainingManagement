@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { useState, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { Button, Stack, Typography, Paper, TextField, Autocomplete } from '@mui/material';
+import { Button, Stack, Typography, Paper, TextField, Autocomplete, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { DataGrid } from '@mui/x-data-grid';
 
@@ -31,6 +31,7 @@ export default function Sessions() {
     const [dogAutocomplete, setDogAutocomplete] = useState("")
 
     const [fieldsDirty, setFieldsDirty] = useState(false)
+    const [deletingSession, setDeletingSession] = useState(false)
 
 
     const pullState = () => {
@@ -59,6 +60,11 @@ export default function Sessions() {
             instructor_ids: instructorIds,
             dog_ids: dogIds,
         }).then(() => setFieldsDirty(false))
+    }
+
+    const deleteSession = () => {
+        backend.current.deleteSession(sessionId)
+            .then(() => {window.location.href = "/sessions"})
     }
 
     const setOnBeforeUnload = () => {
@@ -141,7 +147,37 @@ export default function Sessions() {
                 >
                     Save
                 </Button>
+                <Button
+                    variant="contained"
+                    onClick={() => setDeletingSession(true)}
+                    disabled={fieldsDirty}
+                >
+                    Delete
+                </Button>
                 <Typography variant="h4">Session: {title}</Typography>
+                <Dialog
+                    open={deletingSession}
+                    onClose={() => setDeletingSession(false)}
+                >
+                    <DialogTitle>{"Delete Session?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            {"Delete this session? This action is permanent"}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={() => setDeletingSession(false)}
+                        >Cancel
+                        </Button>
+                        <Button
+                            onClick={deleteSession}
+                            autoFocus
+                        >
+                            Delete
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Stack>
             <br />
             <Stack spacing={2} direction="row">

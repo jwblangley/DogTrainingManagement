@@ -117,3 +117,22 @@ def save_session(session):
             cursor.execute("INSERT INTO session_dogs (session_id, dog_id) VALUES (%s, %s)", (session["id"], dog_id))
 
         conn.commit()
+
+
+def delete_session(session_id):
+    with closing(
+        psycopg2.connect(
+            database=POSTGRES_DB,
+            host=POSTGRES_HOST,
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+            port=POSTGRES_PORT,
+        )
+    ) as conn:
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "DELETE FROM sessions WHERE id=%s", (session_id, )
+        )
+
+        conn.commit()
