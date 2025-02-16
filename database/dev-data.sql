@@ -44,6 +44,42 @@ INSERT INTO dogs (
     'A good boi'
 );
 
+INSERT INTO dogs (
+    active,
+    pet_name,
+    owner_id,
+    dob,
+    breed,
+    sex,
+    notes
+) VALUES (
+    TRUE,
+    'Boris',
+    1,
+    '2017-05-04',
+    'Jackapoo',
+    'Male (neutered)',
+    'Smol'
+);
+
+INSERT INTO dogs (
+    active,
+    pet_name,
+    owner_id,
+    dob,
+    breed,
+    sex,
+    notes
+) VALUES (
+    TRUE,
+    'Rosa',
+    2,
+    '2014-05-04',
+    'Labradoodle',
+    'Female (neutered)',
+    'best girl'
+);
+
 INSERT INTO instructors (
     active,
     first_name,
@@ -64,4 +100,34 @@ INSERT INTO sessions (
 ) VALUES (
     '2025-02-10T17:30',
     'How to sit for beginners'
+);
+
+INSERT INTO session_instructors (
+    session_id,
+    instructor_id
+) VALUES (
+    1,
+    1
+);
+
+INSERT INTO session_dogs (
+    session_id,
+    dog_id
+) VALUES (
+    1,
+    1
+);
+INSERT INTO session_dogs (
+    session_id,
+    dog_id
+) VALUES (
+    1,
+    2
+);
+INSERT INTO session_dogs (
+    session_id,
+    dog_id
+) VALUES (
+    1,
+    3
 );
