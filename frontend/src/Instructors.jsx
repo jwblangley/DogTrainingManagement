@@ -36,7 +36,7 @@ export default function Instructors() {
         { field: 'last_name', headerName: 'Last name', width: 150 },
         { field: 'email', headerName: 'Email Address', width: 250 },
         { field: 'phone', headerName: 'Contact Number', width: 150 },
-        { field: 'active', headerName: 'Active', width: 75,
+        { field: 'active', headerName: 'Active', width: 100,
             renderCell: (params) => (
                 <div style={{textAlign: "center"}}>
                     {params.row.active

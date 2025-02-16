@@ -59,7 +59,7 @@ export default function Dogs() {
         { field: 'breed', headerName: 'Breed', width: 250 },
         { field: 'sex', headerName: 'Sex', width: 150 },
         { field: 'notes', headerName: 'Notes', width: 400 },
-        { field: 'active', headerName: 'Active', width: 75,
+        { field: 'active', headerName: 'Active', width: 100,
             renderCell: (params) => (
                 <div style={{textAlign: "center"}}>
                     {params.row.active
