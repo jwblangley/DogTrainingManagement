@@ -249,7 +249,7 @@ def save_session():
     request_json = request.get_json()
 
     psql_save_session(
-        request_json.get("session", []),
+        request_json.get("session", {}),
     )
     return "Success"
 

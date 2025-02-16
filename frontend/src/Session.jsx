@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { useState, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { Button, Stack, Typography, Paper, TextField } from '@mui/material';
+import { Button, Stack, Typography, Paper, TextField, Autocomplete } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { DataGrid } from '@mui/x-data-grid';
 
@@ -22,6 +22,7 @@ export default function Sessions() {
 
     const [instructors, setInstructors] = useState([])
     const [instructorIds, setInstructorIds] = useState([])
+    const [instructorAutocomplete, setInstructorAutocomplete] = useState("")
 
     const [dogs, setDogs] = useState([])
     const [dogIds, setDogIds] = useState([])
@@ -51,7 +52,8 @@ export default function Sessions() {
             id: sessionId,
             title,
             date_time: dateTime.format("YYYY-MM-DDTHH:mm:ss"),
-            notes
+            notes,
+            instructor_ids: instructorIds
         }).then(() => setFieldsDirty(false))
     }
 
@@ -66,8 +68,7 @@ export default function Sessions() {
     useEffect(pullState, [])
     useEffect(setOnBeforeUnload, [fieldsDirty])
 
-
-    const Instructorcolumns = [
+    const instructorColumns = [
         {
             field: 'full_name', headerName: 'Name', width: 250,
             valueGetter: (value, row) => `${`${row.first_name} ` || ''}${row.last_name || ''}`
@@ -131,9 +132,33 @@ export default function Sessions() {
                 <Paper sx={{padding: 2, width: "50%"}}>
                     <Stack spacing={2} direction="column">
                         <Typography variant="h5">Instructors</Typography>
+                        <Autocomplete
+                            options={instructors.filter(i => i.active && ! instructorIds.includes(i.id)).map(i => i.id)}
+                            inputValue={instructorAutocomplete}
+                            onInputChange={(e, v, reason) => {
+                                if (reason === "input") {
+                                    setInstructorAutocomplete(v)
+                                }
+                            }}
+                            onChange={(e, v) => {
+                                if (v !== null) {
+                                    setInstructorIds(prev => [...prev, v])
+                                    setInstructorAutocomplete("")
+                                    setFieldsDirty(true)
+                                }
+                            }}
+                            getOptionLabel={opt => {
+                                if (opt === null) {
+                                    return ""
+                                }
+                                const i = instructors.find(i => i.id === opt)
+                                return `${`${i.first_name} ` || ''}${i.last_name || ''}`
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Add an instructor" variant="standard" fullWidth/>}
+                        />
                         <DataGrid
                             rows={instructors.filter(i => instructorIds.includes(i.id))}
-                            columns={Instructorcolumns}
+                            columns={instructorColumns}
                             gridRowId={(row) => row.id}
                             disableRowSelectionOnClick
                             initialState={{

@@ -100,9 +100,17 @@ def save_session(session):
         )
     ) as conn:
         cursor = conn.cursor()
+
+        if session["id"] == "new":
+            # TODO
+            return
+
         cursor.execute(
             "UPDATE sessions SET date_time=%s, title=%s, notes=%s "
             "WHERE id=%s", (session["date_time"], session["title"], session["notes"], session["id"])
         )
+        cursor.execute("DELETE FROM session_instructors WHERE session_id=%s", (session["id"], ))
+        for instructor_id in session["instructor_ids"]:
+            cursor.execute("INSERT INTO session_instructors (session_id, instructor_id) VALUES (%s, %s)", (session["id"], instructor_id))
 
         conn.commit()
