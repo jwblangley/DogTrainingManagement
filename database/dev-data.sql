@@ -133,3 +133,51 @@ INSERT INTO session_dogs (
     1,
     3
 );
+
+INSERT INTO income_expenses (
+    value,
+    date,
+    description
+) VALUES (
+    -12.34,
+    '2025-01-02',
+    'Supplies'
+);
+
+INSERT INTO income_expenses (
+    value,
+    date,
+    description
+) VALUES (
+    2.34,
+    '2025-02-03',
+    'Refund'
+);
+
+INSERT INTO income_expenses (
+    value,
+    date,
+    description,
+    client_id,
+    session_credits
+) VALUES (
+    50.00,
+    '2025-02-05',
+    'Payment for 8 sessions',
+    1,
+    8
+);
+
+INSERT INTO income_expenses (
+    value,
+    date,
+    description,
+    instructor_id,
+    session_credits
+) VALUES (
+    -150.00,
+    '2025-02-05',
+    'Pay for 5 sessions',
+    1,
+    5
+);
