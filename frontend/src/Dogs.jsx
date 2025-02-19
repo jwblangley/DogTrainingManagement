@@ -212,6 +212,9 @@ export default function Dogs() {
                         fullWidth
                         variant="standard"
                         defaultValue={modifyingDog ? getDog(rowSelectionModel[0]).pet_name : ""}
+                        slotProps={{
+                            htmlInput: { maxLength: 255 }
+                        }}
                     />
                     <Autocomplete
                         id="ownerId" name="ownerId"
@@ -251,6 +254,9 @@ export default function Dogs() {
                         fullWidth
                         variant="standard"
                         defaultValue={modifyingDog ? getDog(rowSelectionModel[0]).breed : ""}
+                        slotProps={{
+                            htmlInput: { maxLength: 255 }
+                        }}
                     />
                     <TextField
                         select
@@ -276,6 +282,9 @@ export default function Dogs() {
                         multiline
                         variant="standard"
                         defaultValue={modifyingDog ? getDog(rowSelectionModel[0]).notes : ""}
+                        slotProps={{
+                            htmlInput: { maxLength: 2047 }
+                        }}
                     />
                 </DialogContent>
                 <DialogActions>

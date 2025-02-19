@@ -203,6 +203,9 @@ export default function Sessions() {
                             })}
                             fullWidth
                             variant="standard"
+                            slotProps={{
+                                htmlInput: { maxLength: 1023 }
+                            }}
                         />
                         <DateTimePicker
                             label="Date and Time"
@@ -226,6 +229,9 @@ export default function Sessions() {
                             })}
                             fullWidth
                             variant="standard"
+                            slotProps={{
+                                htmlInput: { maxLength: 4095 }
+                            }}
                         />
                     </Stack>
                 </Paper>

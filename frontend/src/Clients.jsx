@@ -184,6 +184,9 @@ export default function Clients() {
                         fullWidth
                         variant="standard"
                         defaultValue={modifyingClient ? getClient(rowSelectionModel[0]).first_name : ""}
+                        slotProps={{
+                            htmlInput: {maxLength: 255}
+                        }}
                     />
                     <TextField
                         id="lastName"
@@ -192,6 +195,9 @@ export default function Clients() {
                         fullWidth
                         variant="standard"
                         defaultValue={modifyingClient ? getClient(rowSelectionModel[0]).last_name : ""}
+                        slotProps={{
+                            htmlInput: { maxLength: 255 }
+                        }}
                     />
                     <TextField
                         id="email"
@@ -201,6 +207,9 @@ export default function Clients() {
                         fullWidth
                         variant="standard"
                         defaultValue={modifyingClient ? getClient(rowSelectionModel[0]).email : ""}
+                        slotProps={{
+                            htmlInput: { maxLength: 511 }
+                        }}
                     />
                     <TextField
                         id="phone"
@@ -209,6 +218,9 @@ export default function Clients() {
                         fullWidth
                         variant="standard"
                         defaultValue={modifyingClient ? getClient(rowSelectionModel[0]).phone : ""}
+                        slotProps={{
+                            htmlInput: { maxLength: 31 }
+                        }}
                     />
                 </DialogContent>
                 <DialogActions>
