@@ -255,6 +255,12 @@ class BackendAdapter {
             }
         });
     }
+
+    // Finances
+    listFinances() {
+        return fetch(`${this.url}/list-income-expenses`)
+            .then(res => res.json());
+    }
 }
 
 
