@@ -51,5 +51,6 @@ CREATE TABLE income_expenses (
     description     VARCHAR(255) NOT NULL,
     client_id       INTEGER REFERENCES clients(id) ON DELETE SET NULL,
     instructor_id   INTEGER REFERENCES instructors(id) ON DELETE SET NULL,
-    session_credits INTEGER
+    session_credits INTEGER DEFAULT 0,
+    CONSTRAINT      not_both_client_and_instructor CHECK (NOT ((client_id IS NOT NULL) AND (instructor_id IS NOT NULL)))
 )
