@@ -31,6 +31,8 @@ from psql_adapter.sessions import list_session_details as psql_list_session_deta
 from psql_adapter.sessions import save_session as psql_save_session
 from psql_adapter.sessions import delete_session as psql_delete_session
 
+from psql_adapter.finances import list_income_expenses as psql_list_income_expenses
+
 
 load_dotenv()
 
@@ -264,6 +266,14 @@ def delete_session():
         request_json.get("id", None),
     )
     return "Success"
+
+"""
+Finances
+"""
+
+@app.route("/list-income-expenses")
+def list_income_expenses():
+    return jsonify(psql_list_income_expenses())
 
 if __name__ == "__main__":
     ssl_context = (
