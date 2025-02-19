@@ -3,10 +3,15 @@ import dayjs from 'dayjs';
 import { useState, useEffect, useContext } from 'react';
 
 import Typography from '@mui/material/Typography';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField, Autocomplete } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 
 import { BackendContext } from './BackendProvider';
-import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField } from '@mui/material';
 
 
 export default function Finances() {
@@ -18,6 +23,10 @@ export default function Finances() {
     const [addingFinance, setAddingFinance] = useState(false);
     const [modifyingFinance, setModifyingFinance] = useState(false);
     const [deletingFinances, setDeletingFinances] = useState(false);
+
+    const [addFinanceType, setAddFinanceType] = useState("misc");
+    const [selectedClientId, setSelectedClientId] = useState(null);
+    const [selectedInstructorId, setSelectedInstructorId] = useState(null);
 
     const [clients, setClients] = useState([])
     const [instructors, setInstructors] = useState([])
@@ -80,6 +89,8 @@ export default function Finances() {
             "phone": phone,
         }).then(() => {
             setAddingFinance(false)
+            setSelectedClientId(null)
+            setSelectedInstructorId(null)
             pullState()
         });
     }
@@ -93,6 +104,8 @@ export default function Finances() {
         }).then(() => {
             setModifyingFinance(false)
             setRowSelectionModel([])
+            setSelectedClientId(null)
+            setSelectedInstructorId(null)
             pullState()
         });
     }
@@ -115,14 +128,32 @@ export default function Finances() {
                 <Typography variant="h4">Finances</Typography>
                 <Button
                     variant="contained"
-                    onClick={() => { setAddingFinance(true) }}
+                    onClick={() => {
+                        setAddingFinance(true)
+                        setAddFinanceType("misc")
+                    }}
                     disabled={rowSelectionModel.length > 0}
                 >
                     Add
                 </Button>
                 <Button
                     variant="contained"
-                    onClick={() => { setModifyingFinance(true) }}
+                    onClick={() => {
+                        setModifyingFinance(true)
+                        const fin = getFinance(rowSelectionModel[0])
+                        if (fin.client_id !== null) {
+                            setAddFinanceType("client")
+                        }
+                        else if (fin.instructor_id !== null) {
+                            setAddFinanceType("instructor")
+                        }
+                        else {
+                            setAddFinanceType("misc")
+                        }
+                        setSelectedClientId(fin.client_id)
+                        setSelectedInstructorId(fin.instructor_id)
+                    }}
+
                     disabled={rowSelectionModel.length !== 1}
                 >
                     Modify
@@ -169,7 +200,12 @@ export default function Finances() {
                     onSubmit: (event) => {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
-                        const formJson = Object.fromEntries((formData).entries());
+                        const formJson = {
+                            ...Object.fromEntries((formData).entries()),
+                            clientId: selectedClientId,
+                            instructorId: instructorId,
+                        }
+
                         console.assert(addingFinance != modifyingFinance)
                         if (addingFinance) {
                             addFinance(formJson)
@@ -179,48 +215,127 @@ export default function Finances() {
                     },
                 }}
             >
-                <DialogTitle>{addingFinance ? "Add New Finance" : "Modify Finance"}</DialogTitle>
+                <DialogTitle>{addingFinance ? "Add New Income/Expense" : "Modify Income/Expense"}</DialogTitle>
                 <DialogContent>
-                    <TextField
-                        required
-                        id="firstName"
-                        name="firstName"
-                        label="First Name"
+                    <RadioGroup
+                        row
+                        value={addFinanceType}
+                        onChange={e => {
+                            const val = e.target.value
+                            setAddFinanceType(val)
+                            if (val !== "client") {
+                                setSelectedClientId(null)
+                            }
+                            if (val !== "instructor") {
+                                setSelectedInstructorId(null)
+                            }
+
+                        }}
+                        name="financeType"
+                    >
+                        <FormControlLabel value="misc" control={<Radio />} label="Miscellaneous" />
+                        <FormControlLabel value="client" control={<Radio />} label="Client" />
+                        <FormControlLabel value="instructor" control={<Radio />} label="Instructor" />
+                    </RadioGroup>
+                    {
+                        addFinanceType === "client" && (
+                            <Autocomplete
+                                id="clientId" name="clientId"
+                                options={clients.filter(c => c.active).map(c => c.id)}
+                                value={selectedClientId}
+                                onChange={(e, v) => setSelectedClientId(v)}
+                                getOptionLabel={opt => {
+                                    if (opt === null) {
+                                        return ""
+                                    }
+                                    const c = clients.find(c => c.id === opt)
+                                    return concatenateName(c.first_name, c.last_name)
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Client" variant="standard" fullWidth required/>}
+                            />
+                        )
+                    }
+                    {
+                        addFinanceType === "instructor" && (
+                            <Autocomplete
+                                id="instructorId" name="instructorId"
+                                options={instructors.filter(i => i.active).map(i => i.id)}
+                                value={selectedInstructorId}
+                                onChange={(e, v) => setSelectedInstructorId(v)}
+                                getOptionLabel={opt => {
+                                    if (opt === null) {
+                                        return ""
+                                    }
+                                    const i = instructors.find(i => i.id === opt)
+                                    return concatenateName(i.first_name, i.last_name)
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Instructor" variant="standard" fullWidth required/>}
+                            />
+                        )
+                    }
+                    <DatePicker
+                        label="Date"
+                        id="date"
+                        name="date"
+                        defaultValue={modifyingFinance ? dayjs(getFinance(rowSelectionModel[0]).date, "YYYY-MM-DD") : null}
                         fullWidth
                         variant="standard"
-                        defaultValue={modifyingFinance ? getFinance(rowSelectionModel[0]).first_name : ""}
+                        sx={{
+                            width: "100%"
+                        }}
+                        slotProps={{
+                            textField: {
+                                variant: "standard"
+                            }
+                        }}
                     />
                     <TextField
-                        id="lastName"
-                        name="lastName"
-                        label="Last Name"
+                        id="value"
+                        name="value"
+                        label="Value (negative for expenses)"
+                        type="number"
                         fullWidth
                         variant="standard"
-                        defaultValue={modifyingFinance ? getFinance(rowSelectionModel[0]).last_name : ""}
+                        defaultValue={modifyingFinance ? getFinance(rowSelectionModel[0]).value : ""}
+                        slotProps={{
+                            htmlInput: { maxLength: 15 }
+                        }}
                     />
                     <TextField
-                        id="email"
-                        name="email"
-                        label="Email Address"
-                        type="email"
+                        id="description"
+                        name="description"
+                        label="Description"
                         fullWidth
                         variant="standard"
-                        defaultValue={modifyingFinance ? getFinance(rowSelectionModel[0]).email : ""}
+                        defaultValue={modifyingFinance ? getFinance(rowSelectionModel[0]).description : ""}
+                        slotProps={{
+                            htmlInput: { maxLength: 255 }
+                        }}
                     />
-                    <TextField
-                        id="phone"
-                        name="phone"
-                        label="Contact Number"
-                        fullWidth
-                        variant="standard"
-                        defaultValue={modifyingFinance ? getFinance(rowSelectionModel[0]).phone : ""}
-                    />
+                    {
+                        (addFinanceType === "client" || addFinanceType === "instructor") && (
+                            <TextField
+                                id="session_credits"
+                                name="session_credits"
+                                label="Session Credits (negative to remove)"
+                                type="number"
+                                fullWidth
+                                variant="standard"
+                                defaultValue={modifyingFinance ? getFinance(rowSelectionModel[0]).session_credits : ""}
+                                slotProps={{
+                                    htmlInput: {inputMode: 'numeric', pattern: '[0-9-]'}
+                                }}
+                            />
+                        )
+                    }
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => {
                         console.assert(addingFinance != modifyingFinance)
                         setAddingFinance(false)
                         setModifyingFinance(false)
+                        setSelectedClientId(null)
+                        setSelectedInstructorId(null)
                     }}>
                         Cancel
                     </Button>
