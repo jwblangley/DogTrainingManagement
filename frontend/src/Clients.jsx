@@ -32,6 +32,7 @@ export default function Clients() {
 
     useEffect(pullState, [])
 
+    // TODO: show remaining credits
     const columns = [
         { field: 'first_name', headerName: 'First name', width: 150 },
         { field: 'last_name', headerName: 'Last name', width: 150 },
