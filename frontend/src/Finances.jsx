@@ -128,7 +128,7 @@ export default function Finances() {
 
     return (
         <Stack spacing={2} direction="row">
-            <Paper sx={{padding: 2, width: "70%", paddingBottom: "72px"}}>
+            <Paper sx={{padding: 2, width: "70%", paddingBottom: "78px"}}>
                 <Stack spacing={2} direction="row">
                     <Typography variant="h4">Finances</Typography>
                     <Button
