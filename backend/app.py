@@ -34,6 +34,7 @@ from psql_adapter.sessions import delete_session as psql_delete_session
 from psql_adapter.finances import list_income_expenses as psql_list_income_expenses
 from psql_adapter.finances import add_new_income_expense as psql_add_new_income_expense
 from psql_adapter.finances import modify_income_expense as psql_modify_income_expense
+from psql_adapter.finances import delete_income_expenses as psql_delete_income_expenses
 
 
 load_dotenv()
@@ -303,6 +304,15 @@ def modify_income_expense():
         form_json.get("client_id", None),
         form_json.get("instructor_id", None),
         form_json.get("session_credits", None),
+    )
+    return "Success"
+
+@app.route("/delete-income-expenses", methods=["POST"])
+def delete_income_expenses():
+    request_json = request.get_json()
+
+    psql_delete_income_expenses(
+        request_json.get("income_expenses_to_delete", []),
     )
     return "Success"
 

@@ -73,3 +73,23 @@ def modify_income_expense(finance_id, date, value, description, client_id, instr
             (date, value, description, client_id, instructor_id, session_credits, finance_id),
         )
         conn.commit()
+
+def delete_income_expenses(income_expenses_to_delete):
+    with closing(
+        psycopg2.connect(
+            database=POSTGRES_DB,
+            host=POSTGRES_HOST,
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+            port=POSTGRES_PORT,
+        )
+    ) as conn:
+        cursor = conn.cursor()
+        print(income_expenses_to_delete)
+        for finance_id in income_expenses_to_delete:
+            cursor.execute(
+                "DELETE FROM income_expenses WHERE id=%s",
+                (finance_id,),
+            )
+
+        conn.commit()

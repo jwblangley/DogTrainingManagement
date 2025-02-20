@@ -296,6 +296,18 @@ class BackendAdapter {
             }
         });
     }
+
+    deleteFinances(finances_to_delete) {
+        return fetch(`${this.url}/delete-income-expenses`, {
+            method: "POST",
+            body: JSON.stringify({
+                income_expenses_to_delete: finances_to_delete
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+    }
 }
 
 
