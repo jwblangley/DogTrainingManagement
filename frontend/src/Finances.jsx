@@ -81,12 +81,14 @@ export default function Finances() {
 
     ];
 
-    const addFinance = ({ firstName, lastName, email, phone }) => {
+    const addFinance = ({ date, description, value, clientId, instructorId, sessionCredits }) => {
         backend.current.addNewFinance({
-            "first_name": firstName,
-            "last_name": lastName,
-            "email": email,
-            "phone": phone,
+            "date": date.length > 0 ? dayjs(date, "DD/MM/YYYY").format("YYYY-MM-DD") : null,
+            "description": description,
+            "value": value,
+            "client_id": clientId,
+            "instructor_id": instructorId,
+            "session_credits": sessionCredits,
         }).then(() => {
             setAddingFinance(false)
             setSelectedClientId(null)
@@ -95,12 +97,14 @@ export default function Finances() {
         });
     }
 
-    const modifyFinance = (financeId, { firstName, lastName, email, phone }) => {
+    const modifyFinance = (financeId, { date, description, value, clientId, instructorId, sessionCredits }) => {
         backend.current.modifyFinance(financeId, {
-            "first_name": firstName,
-            "last_name": lastName,
-            "email": email,
-            "phone": phone,
+            "date": date.length > 0 ? dayjs(date, "DD/MM/YYYY").format("YYYY-MM-DD") : null,
+            "description": description,
+            "value": value,
+            "client_id": clientId,
+            "instructor_id": instructorId,
+            "session_credits": sessionCredits,
         }).then(() => {
             setModifyingFinance(false)
             setRowSelectionModel([])
@@ -203,7 +207,7 @@ export default function Finances() {
                         const formJson = {
                             ...Object.fromEntries((formData).entries()),
                             clientId: selectedClientId,
-                            instructorId: instructorId,
+                            instructorId: selectedInstructorId,
                         }
 
                         console.assert(addingFinance != modifyingFinance)
@@ -298,7 +302,7 @@ export default function Finances() {
                         variant="standard"
                         defaultValue={modifyingFinance ? getFinance(rowSelectionModel[0]).value : ""}
                         slotProps={{
-                            htmlInput: { maxLength: 15 }
+                            htmlInput: { maxLength: 15, step: ".01" }
                         }}
                     />
                     <TextField
@@ -315,8 +319,8 @@ export default function Finances() {
                     {
                         (addFinanceType === "client" || addFinanceType === "instructor") && (
                             <TextField
-                                id="session_credits"
-                                name="session_credits"
+                                id="sessionCredits"
+                                name="sessionCredits"
                                 label="Session Credits (negative to remove)"
                                 type="number"
                                 fullWidth

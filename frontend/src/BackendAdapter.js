@@ -261,6 +261,41 @@ class BackendAdapter {
         return fetch(`${this.url}/list-income-expenses`)
             .then(res => res.json());
     }
+
+    addNewFinance({ date, value, description, client_id, instructor_id, session_credits }) {
+        return fetch(`${this.url}/add-new-income-expense`, {
+            method: "POST",
+            body: JSON.stringify({
+                date,
+                value,
+                description,
+                client_id,
+                instructor_id,
+                session_credits
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+    }
+
+    modifyFinance(id, { date, value, description, client_id, instructor_id, session_credits }) {
+        return fetch(`${this.url}/modify-income-expense`, {
+            method: "POST",
+            body: JSON.stringify({
+                id,
+                date,
+                value,
+                description,
+                client_id,
+                instructor_id,
+                session_credits
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+    }
 }
 
 

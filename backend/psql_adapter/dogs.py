@@ -54,7 +54,6 @@ def add_new_dog(pet_name, owner_id, dob, breed, sex, notes):
             port=POSTGRES_PORT,
         )
     ) as conn:
-        print(dob)
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO dogs (pet_name, owner_id, dob, breed, sex, notes) VALUES (%s, %s, %s, %s, %s, %s)",

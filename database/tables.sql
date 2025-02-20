@@ -47,7 +47,7 @@ CREATE TABLE session_dogs (
 CREATE TABLE income_expenses (
     id              INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     value           NUMERIC(12,2) NOT NULL, --  positive=income, negative=expense
-    date            DATE NOT NULL DEFAULT NOW(),
+    date            DATE NOT NULL,
     description     VARCHAR(255) NOT NULL,
     client_id       INTEGER REFERENCES clients(id) ON DELETE SET NULL,
     instructor_id   INTEGER REFERENCES instructors(id) ON DELETE SET NULL,

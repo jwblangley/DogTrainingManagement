@@ -32,6 +32,8 @@ from psql_adapter.sessions import save_session as psql_save_session
 from psql_adapter.sessions import delete_session as psql_delete_session
 
 from psql_adapter.finances import list_income_expenses as psql_list_income_expenses
+from psql_adapter.finances import add_new_income_expense as psql_add_new_income_expense
+from psql_adapter.finances import modify_income_expense as psql_modify_income_expense
 
 
 load_dotenv()
@@ -274,6 +276,35 @@ Finances
 @app.route("/list-income-expenses")
 def list_income_expenses():
     return jsonify(psql_list_income_expenses())
+
+@app.route("/add-new-income-expense", methods=["POST"])
+def add_new_income_expense():
+    form_json = request.get_json()
+
+    psql_add_new_income_expense(
+        form_json.get("date", None),
+        form_json.get("value", None),
+        form_json.get("description", None),
+        form_json.get("client_id", None),
+        form_json.get("instructor_id", None),
+        form_json.get("session_credits", None),
+    )
+    return "Success"
+
+@app.route("/modify-income-expense", methods=["POST"])
+def modify_income_expense():
+    form_json = request.get_json()
+
+    psql_modify_income_expense(
+        form_json.get("id", None),
+        form_json.get("date", None),
+        form_json.get("value", None),
+        form_json.get("description", None),
+        form_json.get("client_id", None),
+        form_json.get("instructor_id", None),
+        form_json.get("session_credits", None),
+    )
+    return "Success"
 
 if __name__ == "__main__":
     ssl_context = (
