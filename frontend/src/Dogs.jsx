@@ -85,7 +85,7 @@ export default function Dogs() {
         backend.current.modifyDog(dogId, {
             "pet_name": petName,
             "owner_id": ownerId,
-            "dob": dayjs(dob, "DD/MM/YYYY").format("YYYY-MM-DD"),
+            "dob": dob.length > 0 ? dayjs(dob, "DD/MM/YYYY").format("YYYY-MM-DD") : null,
             "breed": breed,
             "sex": sex,
             "notes": notes,
