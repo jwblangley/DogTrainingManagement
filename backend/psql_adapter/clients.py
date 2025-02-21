@@ -20,7 +20,28 @@ def list_clients():
         )
     ) as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, active, first_name, last_name, email, phone FROM clients")
+        cursor.execute(
+            "SELECT clients.id, active, first_name, last_name, email, phone, "
+            "(SELECT SUM(session_credits) FROM income_expenses WHERE client_id = clients.id), "
+            "("
+                "SELECT COUNT(dogs.id) "
+                "FROM session_dogs "
+                "INNER JOIN dogs ON session_dogs.dog_id = dogs.id "
+                "INNER JOIN sessions ON session_dogs.session_id = sessions.id "
+                "WHERE dogs.owner_id = clients.id AND sessions.date_time < NOW()"
+            "),"
+            "("
+                "SELECT COUNT(dogs.id) "
+                "FROM session_dogs "
+                "INNER JOIN dogs ON session_dogs.dog_id = dogs.id "
+                "INNER JOIN sessions ON session_dogs.session_id = sessions.id "
+                "WHERE dogs.owner_id = clients.id AND sessions.date_time >= NOW()"
+            ") "
+            "FROM clients"
+        )
+
+        def _zero_if_none(x):
+            return 0 if x is None else x
 
         return [
             {
@@ -30,8 +51,10 @@ def list_clients():
                 "last_name": last_name,
                 "email": email,
                 "phone": phone,
+                "remaining_credits": _zero_if_none(total_credits) - _zero_if_none(used_credits),
+                "remaining_credits_incl_pending": _zero_if_none(total_credits) - _zero_if_none(used_credits) - _zero_if_none(pending_use_credits),
             }
-            for (client_id, active, first_name, last_name, email, phone) in cursor.fetchall()
+            for (client_id, active, first_name, last_name, email, phone, total_credits, used_credits, pending_use_credits) in cursor.fetchall()
         ]
 
 

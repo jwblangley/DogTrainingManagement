@@ -4,10 +4,12 @@ import Typography from '@mui/material/Typography';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 import { BackendContext } from './BackendProvider';
-import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField } from '@mui/material';
+import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField, Box } from '@mui/material';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+
+import theme from './theme';
 
 
 export default function Clients() {
@@ -32,12 +34,35 @@ export default function Clients() {
 
     useEffect(pullState, [])
 
-    // TODO: show remaining credits
     const columns = [
         { field: 'first_name', headerName: 'First name', width: 150 },
         { field: 'last_name', headerName: 'Last name', width: 150 },
         { field: 'email', headerName: 'Email Address', width: 250 },
         { field: 'phone', headerName: 'Contact Number', width: 150 },
+        { field: 'remaining_credits', headerName: 'Remaining credits', width: 150,
+            renderCell: (params) => (
+                <Box
+                    sx={{
+                        color: params.row.remaining_credits >= 0 ? theme.palette.success.dark : theme.palette.error.dark,
+                        fontWeight: params.row.remaining_credits >= 0 ? "normal" : "bold"
+                    }}
+                >
+                    {params.value}
+                </Box>
+            )
+         },
+        { field: 'remaining_credits_incl_pending', headerName: 'including upcoming', width: 150,
+            renderCell: (params) => (
+                <Box
+                    sx={{
+                        color: params.row.remaining_credits_incl_pending >= 0 ? theme.palette.success.dark : theme.palette.error.dark,
+                        fontWeight: params.row.remaining_credits_incl_pending >= 0 ? "normal" : "bold"
+                    }}
+                >
+                    {params.value}
+                </Box>
+            )
+         },
         { field: 'active', headerName: 'Active', width: 100,
             renderCell: (params) => (
                 <div style={{textAlign: "center"}}>
