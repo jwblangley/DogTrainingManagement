@@ -35,6 +35,7 @@ from psql_adapter.finances import list_income_expenses as psql_list_income_expen
 from psql_adapter.finances import add_new_income_expense as psql_add_new_income_expense
 from psql_adapter.finances import modify_income_expense as psql_modify_income_expense
 from psql_adapter.finances import delete_income_expenses as psql_delete_income_expenses
+from psql_adapter.finances import finance_statement as psql_finance_statement
 
 
 load_dotenv()
@@ -315,6 +316,14 @@ def delete_income_expenses():
         request_json.get("income_expenses_to_delete", []),
     )
     return "Success"
+
+@app.route("/finance-statement")
+def finance_statement():
+    return Response(
+        psql_finance_statement(
+            request.args.get("start"),
+            request.args.get("end")
+        ), mimetype="application/pdf")
 
 if __name__ == "__main__":
     ssl_context = (

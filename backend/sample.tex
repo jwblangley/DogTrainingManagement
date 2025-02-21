@@ -1,0 +1,27 @@
+% Template to be fed to the backend system that will add table contents
+% Also to find and replace:
+%   STATEMENTSTART: Date of the start of the report
+%   STATEMENTEND: Date of the end of the report
+
+\documentclass[12pt]{article}
+
+\usepackage[a4paper, margin=2cm]{geometry}
+\usepackage{array}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+
+\section*{Statement for period: STATEMENTSTART - STATEMENTEND}
+\noindent
+\begin{center}
+\begin{tabular}{ | m{5em} | m{20em}| m{5em} | m{5em} | }
+    \hline
+    Date & Description & Third Party & Value \\
+    \hline
+    % STATEMENT TABLE
+    \hline
+\end{tabular}
+\end{center}
+
+\end{document}

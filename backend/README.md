@@ -5,7 +5,7 @@
 `postgresql-client` must be installed. This can be installed on debian-based systems with:
 
 ```bash
-sudo apt install postgresql-client
+sudo apt install postgresql-client texlive-latex-recommended
 ```
 
 ## Setup

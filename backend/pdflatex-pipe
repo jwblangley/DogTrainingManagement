@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -e
+
+temp_dir=$(mktemp --directory -t pdflatex-pipe-XXXXXXXX)
+
+cd "$temp_dir"
+
+# Write to statement.tex
+cat >statement.tex
+
+pdflatex statement.tex 1>&2
+
+realpath statement.pdf 1>&2
+cat statement.pdf

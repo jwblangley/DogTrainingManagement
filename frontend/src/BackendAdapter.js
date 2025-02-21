@@ -5,16 +5,17 @@ class BackendAdapter {
 
     // Backup
 
-    createBackup() {
-        const download = (uri) => {
-            const link = document.createElement("a");
-            link.href = uri;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+    _download = (uri) => {
+        const link = document.createElement("a");
+        link.href = uri;
+        link.target = "_blank"
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 
-        download(`${this.url}/create-backup`)
+    createBackup() {
+        this._download(`${this.url}/create-backup`)
     }
 
     restoreBackup(formData) {
@@ -307,6 +308,10 @@ class BackendAdapter {
                 "Content-type": "application/json; charset=UTF-8"
             }
         });
+    }
+
+    generateFinanceStatement(start, end) {
+        this._download(`${this.url}/finance-statement?start=${start}&end=${end}`)
     }
 }
 

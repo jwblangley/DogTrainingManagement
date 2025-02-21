@@ -28,6 +28,9 @@ export default function Finances() {
     const [selectedClientId, setSelectedClientId] = useState(null);
     const [selectedInstructorId, setSelectedInstructorId] = useState(null);
 
+    const [reportStartDate, setReportStartDate] = useState(dayjs().startOf("month"));
+    const [reportEndDate, setReportEndDate] = useState(dayjs().endOf("month"));
+
     const [clients, setClients] = useState([])
     const [instructors, setInstructors] = useState([])
 
@@ -372,8 +375,31 @@ export default function Finances() {
                 </Dialog>
             </Paper>
             <Paper sx={{ padding: 2, width: "30%"}}>
-                <Typography variant="h4">Generate Statement</Typography>
-                {/* TODO */}
+                <Stack spacing={2} direction="column">
+                    <Typography variant="h4">Generate Statement</Typography>
+                    <DatePicker
+                        label="Statement start"
+                        value={reportStartDate}
+                        onChange={newValue => setReportStartDate(newValue)}
+                    />
+                    <DatePicker
+                        label="Statement end"
+                        value={reportEndDate}
+                        onChange={newValue => setReportEndDate(newValue)}
+                    />
+                    <Button
+                        variant='contained'
+                        disabled={!reportStartDate.isValid() || !reportEndDate.isValid() || reportStartDate >= reportEndDate}
+                        onClick={() => {
+                            backend.current.generateFinanceStatement(
+                                reportStartDate.format("YYYY-MM-DD"),
+                                reportEndDate.format("YYYY-MM-DD")
+                            )
+                        }}
+                    >
+                        Generate
+                    </Button>
+                </Stack>
             </Paper>
         </Stack>
     )
