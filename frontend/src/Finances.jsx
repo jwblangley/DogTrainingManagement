@@ -70,11 +70,11 @@ export default function Finances() {
             valueGetter: (value, row) => {
                 if (row.client_id) {
                     const client = getClient(row.client_id)
-                    return concatenateName(client.first_name, client.last_name)
+                    return concatenateName(client?.first_name, client?.last_name)
                 }
                 if (row.instructor_id) {
                     const instructor = getInstructor(row.instructor_id)
-                    return concatenateName(instructor.first_name, instructor.last_name)
+                    return concatenateName(instructor?.first_name, instructor?.last_name)
                 }
             }
         },
@@ -257,7 +257,7 @@ export default function Finances() {
                                             return ""
                                         }
                                         const c = clients.find(c => c.id === opt)
-                                        return concatenateName(c.first_name, c.last_name)
+                                        return concatenateName(c?.first_name, c?.last_name)
                                     }}
                                     renderInput={(params) => <TextField {...params} label="Client" variant="standard" fullWidth required/>}
                                 />
@@ -275,7 +275,7 @@ export default function Finances() {
                                             return ""
                                         }
                                         const i = instructors.find(i => i.id === opt)
-                                        return concatenateName(i.first_name, i.last_name)
+                                        return concatenateName(i?.first_name, i?.last_name)
                                     }}
                                     renderInput={(params) => <TextField {...params} label="Instructor" variant="standard" fullWidth required/>}
                                 />
