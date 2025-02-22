@@ -285,7 +285,7 @@ export default function Finances() {
                             label="Date"
                             id="date"
                             name="date"
-                            defaultValue={modifyingFinance ? dayjs(getFinance(rowSelectionModel[0]).date, "YYYY-MM-DD") : null}
+                            defaultValue={modifyingFinance ? dayjs(getFinance(rowSelectionModel[0]).date, "YYYY-MM-DD") : dayjs()}
                             fullWidth
                             variant="standard"
                             sx={{
