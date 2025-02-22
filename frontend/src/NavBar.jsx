@@ -24,7 +24,7 @@ export default function NavBar() {
                         size='large'
                         edge='start'
                         color='inherit'
-                        onClick={() => navigate('home')}
+                        onClick={() => navigate('#/home')}
                         sx={{ marginRight: 2 }}
                     >
                         <PetsIcon />
@@ -33,7 +33,7 @@ export default function NavBar() {
                         {pages.map((page) => (
                             <Button
                                 key={page}
-                                onClick={() => navigate(page)}
+                                onClick={() => navigate(`#/${page}`)}
                                 sx={{
                                     marginTop: 2,
                                     marginBottom: 2,

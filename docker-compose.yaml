@@ -46,8 +46,24 @@ services:
     depends_on:
       database:
         condition: service_started
+
+  frontend:
+    build:
+      context: frontend
+    depends_on:
+      backend:
+        condition: service_started
+    environment:
+      VITE_BACKEND_ENDPOINT: "https://backend:8000"
+      # SSL
+      SSL_CERT_PATH: "/dog_training_management_frontend/public-certificate.crt"
+      SSL_KEY_PATH: "/dog_training_management_frontend/privatekey.key"
+    volumes:
+      - ./frontend/public-certificate.crt:/dog_training_management_frontend/public-certificate.crt:ro
+      - ./frontend/privatekey.key:/dog_training_management_frontend/privatekey.key:ro
     ports:
-      - 8000:8000
+      - 443:443
+
 
 volumes:
   db-data:

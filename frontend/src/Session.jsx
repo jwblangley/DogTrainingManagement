@@ -65,7 +65,7 @@ export default function Sessions() {
         .then((resp) => {
             if (sessionId === "new") {
                 window.onbeforeunload=null
-                window.location.href = `/session?id=${resp.session_id}`
+                window.location.href = `/#/session?id=${resp.session_id}`
             } else {
                 setFieldsDirty(false)
             }
@@ -74,7 +74,7 @@ export default function Sessions() {
 
     const deleteSession = () => {
         backend.current.deleteSession(sessionId)
-            .then(() => {window.location.href = "/sessions"})
+            .then(() => {window.location.href = "/#/sessions"})
     }
 
     const setOnBeforeUnload = () => {

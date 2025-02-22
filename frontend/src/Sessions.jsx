@@ -23,7 +23,7 @@ export default function Sessions() {
     }
 
     const rowClick = (params) => {
-        window.location.href = `/session?id=${params.row.id}`
+        window.location.href = `/#/session?id=${params.row.id}`
     }
 
     useEffect(pullState, [])
@@ -51,7 +51,7 @@ export default function Sessions() {
                 <Typography variant="h4">Sessions</Typography>
                 <Button
                     variant="contained"
-                    href="/session?id=new"
+                    href="/#/session?id=new"
                 >
                     Add
                 </Button>
