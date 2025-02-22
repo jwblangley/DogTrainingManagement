@@ -7,6 +7,7 @@
 
 \usepackage[a4paper, margin=2cm]{geometry}
 \usepackage{array}
+\usepackage{multirow}
 
 \renewcommand{\familydefault}{\sfdefault}
 
@@ -15,9 +16,10 @@
 \section*{Statement for period: STATEMENTSTART - STATEMENTEND}
 \noindent
 \begin{center}
-\begin{tabular}{ | m{5em} | m{20em}| m{5em} | m{5em} | }
+\begin{tabular}{ | m{5em} | m{14em}| m{6em} | m{4em} | m{4em} |}
     \hline
-    Date & Description & Third Party & Value \\
+    \textbf{Date} & \textbf{Description} & \textbf{Third Party} & \multicolumn{2}{|c|}{\textbf{Value}} \\
+    \hline
     \hline
     % STATEMENT TABLE
     \hline

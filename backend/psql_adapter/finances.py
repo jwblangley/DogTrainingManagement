@@ -121,7 +121,7 @@ def finance_statement(start, end):
 
         records = [
             {
-                "value": str(value),
+                "value": float(value),
                 "date": date.isoformat(),
                 "description": description,
                 "client_name": _concatenate_name(client_first_name, client_last_name),
@@ -144,7 +144,17 @@ def finance_statement(start, end):
                 if len(record["instructor_name"]) > 0:
                     third_party = record["instructor_name"]
 
-                print(f"{date} & {description} & {third_party} & {value} \\\\", file=tabular)
+                value_str = f"{value:.2f}"
+                print(f"{date} & {description} & {third_party} & {value_str + '&' if value > 0 else '& ' + value_str} \\\\", file=tabular)
+                print("\\hline", file=tabular)
+
+            neg_sum = sum(r["value"] for r in records if r["value"] < 0)
+            pos_sum = sum(r["value"] for r in records if r["value"] >= 0)
+            print("\\hline", file=tabular)
+            print(f"& & & {pos_sum:.2f} & {neg_sum:.2f} \\\\", file=tabular)
+            print("\\hline", file=tabular)
+            print("& & & \\multicolumn{2}{|c|}{" + f"{pos_sum + neg_sum}" + "}\\\\", file=tabular)
+            print("\\hline", file=tabular)
 
             input_tex = tex_str.replace("% STATEMENT TABLE", tabular.getvalue())
             proc = subprocess.run(["./pdflatex-pipe"], input=input_tex.encode(), capture_output=True)
