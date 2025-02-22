@@ -4,10 +4,13 @@ import Typography from '@mui/material/Typography';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 import { BackendContext } from './BackendProvider';
-import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField } from '@mui/material';
+import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, TextField, Box } from '@mui/material';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+
+import theme from './theme';
+
 
 export default function Instructors() {
 
@@ -37,6 +40,32 @@ export default function Instructors() {
         { field: 'last_name', headerName: 'Last name', width: 150 },
         { field: 'email', headerName: 'Email Address', width: 250 },
         { field: 'phone', headerName: 'Contact Number', width: 150 },
+        {
+            field: 'owed_credits', headerName: 'Owed credits', width: 150,
+            renderCell: (params) => (
+                <Box
+                    sx={{
+                        color: params.row.owed_credits >= 0 ? theme.palette.error.dark : theme.palette.success.dark,
+                        fontWeight: params.row.owed_credits >= 0 ? "bold" : "normal"
+                    }}
+                >
+                    {params.value}
+                </Box>
+            )
+        },
+        {
+            field: 'owed_credits_incl_pending', headerName: 'including upcoming', width: 150,
+            renderCell: (params) => (
+                <Box
+                    sx={{
+                        color: params.row.owed_credits_incl_pending >= 0 ? theme.palette.error.dark : theme.palette.success.dark,
+                        fontWeight: params.row.owed_credits_incl_pending >= 0 ? "bold" : "normal"
+                    }}
+                >
+                    {params.value}
+                </Box>
+            )
+        },
         { field: 'active', headerName: 'Active', width: 100,
             renderCell: (params) => (
                 <div style={{textAlign: "center"}}>

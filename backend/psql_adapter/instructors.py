@@ -20,7 +20,24 @@ def list_instructors():
         )
     ) as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, active, first_name, last_name, email, phone FROM instructors")
+        cursor.execute(
+            "SELECT id, active, first_name, last_name, email, phone, "
+            "(SELECT SUM(session_credits) FROM income_expenses WHERE instructor_id = instructors.id),"
+            "("
+                "SELECT COUNT(instructor_id) "
+                "FROM session_instructors INNER JOIN sessions ON session_instructors.session_id = sessions.id "
+                "WHERE instructor_id = instructors.id AND sessions.date_time < NOW()"
+            "),"
+            "("
+                "SELECT COUNT(instructor_id) "
+                "FROM session_instructors INNER JOIN sessions ON session_instructors.session_id = sessions.id "
+                "WHERE instructor_id = instructors.id AND sessions.date_time >= NOW()"
+            ")"
+            "FROM instructors"
+        )
+
+        def _zero_if_none(x):
+            return 0 if x is None else x
 
         return [
             {
@@ -30,8 +47,10 @@ def list_instructors():
                 "last_name": last_name,
                 "email": email,
                 "phone": phone,
+                "owed_credits": _zero_if_none(owed_credits) - _zero_if_none(paid_credits),
+                "owed_credits_incl_pending": _zero_if_none(owed_credits) + _zero_if_none(pending_owed_credits) - _zero_if_none(paid_credits),
             }
-            for (instructor_id, active, first_name, last_name, email, phone) in cursor.fetchall()
+            for (instructor_id, active, first_name, last_name, email, phone, paid_credits, owed_credits, pending_owed_credits) in cursor.fetchall()
         ]
 
 
