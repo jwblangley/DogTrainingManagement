@@ -2,7 +2,7 @@ services:
   database: &db
     image: postgres
     volumes:
-      - ./database/startup-scripts:/docker-entrypoint-initdb.d:ro
+      - ./database/tables.sql:/docker-entrypoint-initdb.d/tables.sql:ro
       - db-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=postgres
@@ -23,6 +23,31 @@ services:
       - ./database/tables.sql:/docker-entrypoint-initdb.d/0tables.sql:ro
       - ./database/dev-data.sql:/docker-entrypoint-initdb.d/1dev-data.sql:ro
       - db-dev-data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: backend
+    environment:
+      # SSL
+      SSL_CERT_PATH: "/dog_training_management_backend/public-certificate.crt"
+      SSL_KEY_PATH: "/dog_training_management_backend/privatekey.key"
+      # POSTGRES
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "changeme" # CHANGE
+      POSTGRES_HOST: "database"
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "dogtraining"
+      # TEX
+      BASE_STATEMENT_TEX: "/dog_training_management_backend/statement_base.tex"
+    volumes:
+      - ./backend/public-certificate.crt:/dog_training_management_backend/public-certificate.crt:ro
+      - ./backend/privatekey.key:/dog_training_management_backend/privatekey.key:ro
+      - ./backend/sample.tex:/dog_training_management_backend/statement_base.tex:ro
+    depends_on:
+      database:
+        condition: service_started
+    ports:
+      - 8000:8000
 
 volumes:
   db-data:
