@@ -2,7 +2,7 @@ services:
   database: &db
     profiles:
       - ''
-    image: postgres
+    image: postgres:16
     volumes:
       - ./database/tables.sql:/docker-entrypoint-initdb.d/tables.sql:ro
       - db-data:/var/lib/postgresql/data
@@ -45,6 +45,8 @@ services:
       - ./backend/public-certificate.crt:/dog_training_management_backend/public-certificate.crt:ro
       - ./backend/privatekey.key:/dog_training_management_backend/privatekey.key:ro
       - ./backend/sample.tex:/dog_training_management_backend/statement_base.tex:ro
+    ports:
+      - 8000:8000
     depends_on:
       database:
         condition: service_started
@@ -54,11 +56,13 @@ services:
       - ''
     build:
       context: frontend
+      args:
+        # CHANGE: Set to your accessible backend host
+        BACKEND_ENDPOINT: "https://localhost:8000"
     depends_on:
       backend:
         condition: service_started
     environment:
-      VITE_BACKEND_ENDPOINT: "https://backend:8000"
       # SSL
       SSL_CERT_PATH: "/dog_training_management_frontend/public-certificate.crt"
       SSL_KEY_PATH: "/dog_training_management_frontend/privatekey.key"

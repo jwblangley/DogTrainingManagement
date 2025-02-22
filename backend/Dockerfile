@@ -15,7 +15,7 @@ RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
         python3.13-venv \
         libpq-dev \
         libssl-dev \
-        postgresql-client \
+        postgresql-client-16 \
         texlive-latex-base
 
 COPY ./requirements.txt ./requirements.txt

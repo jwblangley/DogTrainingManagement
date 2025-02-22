@@ -12,6 +12,9 @@ COPY ./src ./src
 COPY ./index.html ./index.html
 COPY ./vite.config.js ./vite.config.js
 
+ARG BACKEND_ENDPOINT
+RUN echo "VITE_BACKEND_ENDPOINT=$BACKEND_ENDPOINT" > .env.production
+
 RUN npm run build
 
 RUN --mount=type=cache,target=/root/.npm \

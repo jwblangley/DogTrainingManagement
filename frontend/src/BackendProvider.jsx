@@ -1,4 +1,4 @@
-import { useEffect, useRef, createContext } from "react"
+import { useRef, createContext } from "react"
 import BackendAdapter from "./BackendAdapter"
 
 const BackendContext = createContext({})
