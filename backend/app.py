@@ -3,7 +3,13 @@ import io
 
 from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
-from dotenv import load_dotenv
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    print("dotenv not found. Not loading from .env")
+
 
 from psql_adapter.backup import create_backup as psql_create_backup
 from psql_adapter.backup import restore_backup as psql_restore_backup
@@ -37,8 +43,6 @@ from psql_adapter.finances import modify_income_expense as psql_modify_income_ex
 from psql_adapter.finances import delete_income_expenses as psql_delete_income_expenses
 from psql_adapter.finances import finance_statement as psql_finance_statement
 
-
-load_dotenv()
 
 SSL_CERT_PATH = os.getenv("SSL_CERT_PATH")
 SSL_KEY_PATH = os.getenv("SSL_KEY_PATH")

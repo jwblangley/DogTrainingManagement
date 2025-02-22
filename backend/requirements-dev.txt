@@ -1,3 +1,4 @@
 -r requirements.txt
 black
 psycopg2-binary
+python-dotenv
