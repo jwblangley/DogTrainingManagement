@@ -1,29 +1,25 @@
-FROM ubuntu:24.04
+FROM debian:bookworm
 
 WORKDIR /dog_training_management_backend
 
 RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     apt-get update && \
-    apt-get install -y software-properties-common && \
-    add-apt-repository ppa:deadsnakes/ppa && \
+    apt-get install -y postgresql-common && \
+    yes | /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh && \
     apt-get update && \
     apt-get install -y \
         gcc \
-        python3.13 \
-        python3.13-dev \
-        python3.13-venv \
+        python3 \
+        python3-dev \
+        python3-flask \
+        python3-flask-cors \
+        python3-gunicorn \
+        python3-psycopg2 \
         libpq-dev \
         libssl-dev \
         postgresql-client-16 \
         texlive-latex-base
-
-COPY ./requirements.txt ./requirements.txt
-
-RUN --mount=type=cache,target=/root/.cache/pip \
-    python3.13 -m ensurepip --upgrade && \
-    # ignore-installed due to a clash with blinker
-    python3.13 -m pip install -r requirements.txt --ignore-installed
 
 COPY ./app.py ./app.py
 COPY ./psql_adapter/ ./psql_adapter/
@@ -31,4 +27,4 @@ COPY ./pdflatex-pipe ./pdflatex-pipe
 
 EXPOSE 8000
 
-CMD ["bash", "-c", "gunicorn --workers 4 --bind 0.0.0.0:8000 --certfile=$SSL_CERT_PATH --keyfile=$SSL_KEY_PATH app:app"]
+CMD ["bash", "-c", "python3 -m gunicorn --workers 4 --bind 0.0.0.0:8000 --certfile=$SSL_CERT_PATH --keyfile=$SSL_KEY_PATH app:app"]
