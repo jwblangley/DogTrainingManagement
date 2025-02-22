@@ -1,10 +1,6 @@
 # Environment config
 .env
 
-# SSL keys
-*.key
-*.crt
-
 # Logs
 logs
 *.log

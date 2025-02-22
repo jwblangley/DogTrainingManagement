@@ -8,7 +8,7 @@ services:
       - db-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=changeme
+      - POSTGRES_PASSWORD=changeme # CHANGE
       - POSTGRES_DB=dogtraining
       - PGDATA=/var/lib/postgresql/data
 

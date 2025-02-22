@@ -5,10 +5,6 @@ venv
 # Environment config
 .env
 
-# SSL keys
-*.key
-*.crt
-
 # Python files
 __pycache__
 *.pyc
