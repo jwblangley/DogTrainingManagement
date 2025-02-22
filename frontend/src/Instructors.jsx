@@ -45,8 +45,8 @@ export default function Instructors() {
             renderCell: (params) => (
                 <Box
                     sx={{
-                        color: params.row.owed_credits >= 0 ? theme.palette.error.dark : theme.palette.success.dark,
-                        fontWeight: params.row.owed_credits >= 0 ? "bold" : "normal"
+                        color: params.row.owed_credits > 0 ? theme.palette.error.dark : theme.palette.success.dark,
+                        fontWeight: params.row.owed_credits > 0 ? "bold" : "normal"
                     }}
                 >
                     {params.value}
@@ -58,8 +58,8 @@ export default function Instructors() {
             renderCell: (params) => (
                 <Box
                     sx={{
-                        color: params.row.owed_credits_incl_pending >= 0 ? theme.palette.error.dark : theme.palette.success.dark,
-                        fontWeight: params.row.owed_credits_incl_pending >= 0 ? "bold" : "normal"
+                        color: params.row.owed_credits_incl_pending > 0 ? theme.palette.error.dark : theme.palette.success.dark,
+                        fontWeight: params.row.owed_credits_incl_pending > 0 ? "bold" : "normal"
                     }}
                 >
                     {params.value}
