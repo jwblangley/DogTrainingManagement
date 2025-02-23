@@ -145,13 +145,13 @@ def finance_statement(start, end):
                     third_party = record["instructor_name"]
 
                 value_str = f"{value:.2f}"
-                print(f"{date} & {description} & {third_party} & {value_str + '&' if value > 0 else '& ' + value_str} \\\\", file=tabular)
+                print(f"{date} & {description} & {third_party} & {value_str + '&' if value < 0 else '& ' + value_str} \\\\", file=tabular)
                 print("\\hline", file=tabular)
 
             neg_sum = sum(r["value"] for r in records if r["value"] < 0)
             pos_sum = sum(r["value"] for r in records if r["value"] >= 0)
             print("\\hline", file=tabular)
-            print(f"& & & {pos_sum:.2f} & {neg_sum:.2f} \\\\", file=tabular)
+            print(f"& & & {neg_sum:.2f} & {pos_sum:.2f} \\\\", file=tabular)
             print("\\hline", file=tabular)
             print("& & & \\multicolumn{2}{|c|}{" + f"{pos_sum + neg_sum}" + "}\\\\", file=tabular)
             print("\\hline", file=tabular)
