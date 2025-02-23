@@ -19,7 +19,7 @@ RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
         libpq-dev \
         libssl-dev \
         postgresql-client-16 \
-        texlive-latex-base
+        texlive-latex-extra
 
 COPY ./app.py ./app.py
 COPY ./psql_adapter/ ./psql_adapter/
