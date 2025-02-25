@@ -111,7 +111,8 @@ def finance_statement(start, end):
             "FROM income_expenses "
             "LEFT JOIN clients ON clients.id = income_expenses.client_id "
             "LEFT JOIN instructors ON instructors.id = income_expenses.instructor_id "
-            "WHERE date >= %s AND date <= %s", (start, end)
+            "WHERE date >= %s AND date <= %s "
+            "ORDER BY date ASC", (start, end)
         )
 
         def _concatenate_name(first, last):
